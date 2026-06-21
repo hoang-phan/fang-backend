@@ -4,7 +4,7 @@ module Api
       before_action :set_opponent, only: %i[show update destroy]
 
       def index
-        @opponents = Opponent.includes(:moves, { cinematics: { conversations: :chats } }, { gifts: { conversations: :chats } }, { conversations: :chats }).all.order(:name)
+        @opponents = Opponent.includes(:moves, { cinematics: { conversations: { chats: :sprites } } }, { gifts: { conversations: { chats: :sprites } } }, { conversations: { chats: :sprites } }).all.order(:name)
         render json: @opponents.map { |o| serialize_opponent(o) }
       end
 
@@ -46,7 +46,7 @@ module Api
       private
 
       def set_opponent
-        @opponent = Opponent.includes(:moves, { cinematics: { conversations: :chats } }, { gifts: { conversations: :chats } }, { conversations: :chats }).find(params[:id])
+        @opponent = Opponent.includes(:moves, { cinematics: { conversations: { chats: :sprites } } }, { gifts: { conversations: { chats: :sprites } } }, { conversations: { chats: :sprites } }).find(params[:id])
       end
 
       def opponent_params
@@ -130,7 +130,21 @@ module Api
       end
 
       def serialize_chat(chat)
-        { avatar: chat.avatar, position: chat.position, content: chat.content }
+        {
+          role:     chat.role,
+          position: chat.position,
+          content:  chat.content,
+          sprites:  chat.sprites.map { |s| serialize_sprite(s) }
+        }
+      end
+
+      def serialize_sprite(sprite)
+        h = { url: sprite.url }
+        h[:x]      = sprite.x      unless sprite.x.nil?
+        h[:y]      = sprite.y      unless sprite.y.nil?
+        h[:width]  = sprite.width  unless sprite.width.nil?
+        h[:height] = sprite.height unless sprite.height.nil?
+        h
       end
 
       def serialize_move(move)

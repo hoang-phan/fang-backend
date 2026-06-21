@@ -109,14 +109,28 @@ Matches the frontend `OpponentDef` interface exactly.
 }
 ```
 
+### Sprite object
+
+```jsonc
+{
+  "url":    "/images/sprites/hero_idle.webp", // public-folder path
+  "x":      100,                              // nullable — pixel x offset
+  "y":      200,                              // nullable — pixel y offset
+  "width":  64,                               // nullable — display width in pixels
+  "height": 64                                // nullable — display height in pixels
+}
+```
+
+Sprites are displayed as characters inside a scene (e.g. a character standing in a room). They are not avatars — there is no avatar field on Chat.
+
 ### Conversation object
 
 ```jsonc
 {
   "id": 1,
   "chats": [
-    { "avatar": "hero",     "position": 0, "content": "Thank you for the gift!" },
-    { "avatar": "opponent", "position": 1, "content": "It's nothing, really." }
+    { "role": "hero",     "position": 0, "content": "Thank you for the gift!", "sprites": [] },
+    { "role": "opponent", "position": 1, "content": "It's nothing, really.",   "sprites": [] }
   ],
   // optional — only present when set:
   "backgroundUrl": "/illyasviel/cinematic1.webp", // background image for the scene
@@ -128,9 +142,10 @@ Matches the frontend `OpponentDef` interface exactly.
 
 ```jsonc
 {
-  "avatar":   "hero",                   // speaker identifier
+  "role":    "hero",                    // "hero" | "opponent" | "other"
   "position": 0,                        // ordering index within the conversation
-  "content":  "Thank you for the gift!" // dialogue text
+  "content":  "Thank you for the gift!", // dialogue text
+  "sprites":  [ /* Sprite[] */ ]        // characters displayed in the scene for this line
 }
 ```
 

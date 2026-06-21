@@ -161,15 +161,31 @@ Polymorphic — belongs to Opponent (`has_many`), Gift (`has_many`), or Cinemati
 Cinematic and Gift conversations are displayed sequentially ordered by `position`. Opponent conversations are picked randomly.
 
 ### Chat
-Belongs to Conversation. Ordered by `position`.
+Belongs to Conversation. Ordered by `position`. Has many Sprites (polymorphic).
 
-| column          | type    | notes                                       |
-|-----------------|---------|---------------------------------------------|
-| id              | integer | auto PK                                     |
-| conversation_id | integer | FK → conversations.id                       |
-| avatar          | string  | speaker identifier (e.g. "hero", "goblin")  |
-| position        | integer | ordering index within the conversation       |
-| content         | text    | dialogue text                               |
+| column          | type    | notes                                                  |
+|-----------------|---------|--------------------------------------------------------|
+| id              | integer | auto PK                                                |
+| conversation_id | integer | FK → conversations.id                                  |
+| role            | integer | enum — `hero: 0`, `opponent: 1`, `other: 2`            |
+| position        | integer | ordering index within the conversation                 |
+| content         | text    | dialogue text                                          |
+
+`avatar` column has been removed — use `role` instead.
+
+### Sprite
+Polymorphic — currently belongs to Chat (`spriteable_type: "Chat"`). Represents a character displayed inside a scene (e.g. a hero standing in a room). There is no avatar rendered for a chat line; sprites replace that concept.
+
+| column           | type    | notes                                         |
+|------------------|---------|-----------------------------------------------|
+| id               | integer | auto PK                                       |
+| spriteable_type  | string  | polymorphic owner type (e.g. "Chat")          |
+| spriteable_id    | integer | polymorphic owner id                          |
+| url              | string  | public-folder path, required                  |
+| x                | integer | nullable — pixel x offset in the scene        |
+| y                | integer | nullable — pixel y offset in the scene        |
+| width            | integer | nullable — display width in pixels            |
+| height           | integer | nullable — display height in pixels           |
 
 ### OpponentMove (join table)
 Links an opponent to its moves with an explicit position (0–3).
@@ -217,9 +233,10 @@ Controllers serialise to camelCase to match the frontend interfaces. The mapping
 | `conversation.id`          | `id`              | conversations resource                         |
 | `conversation.background_url` | `backgroundUrl` | omitted when null                             |
 | `conversation.position`    | `position`        | omitted when null; ordering for cinematic/gift |
-| `chat.avatar`              | `avatar`          |                                                |
+| `chat.role`                | `role`            | string: `"hero"`, `"opponent"`, or `"other"`   |
 | `chat.position`            | `position`        |                                                |
 | `chat.content`             | `content`         |                                                |
+| `chat.sprites`             | `sprites`         | array of Sprite objects (url, x, y, width, height) |
 
 `move.icon` is **not** serialised — the frontend uses the `type` field to derive the icon.
 
