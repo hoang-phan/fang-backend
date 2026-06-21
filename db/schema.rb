@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_18_110343) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_21_032159) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -37,6 +37,58 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_18_110343) do
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
+  create_table "chats", force: :cascade do |t|
+    t.string "avatar", null: false
+    t.text "content", null: false
+    t.integer "conversation_id", null: false
+    t.datetime "created_at", null: false
+    t.integer "position", default: 0, null: false
+    t.datetime "updated_at", null: false
+    t.index ["conversation_id", "position"], name: "index_chats_on_conversation_id_and_position"
+    t.index ["conversation_id"], name: "index_chats_on_conversation_id"
+  end
+
+  create_table "cinematics", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.text "description"
+    t.integer "level", null: false
+    t.string "opponent_slug", null: false
+    t.datetime "updated_at", null: false
+    t.index ["opponent_slug", "level"], name: "index_cinematics_on_opponent_slug_and_level", unique: true
+  end
+
+  create_table "conversations", force: :cascade do |t|
+    t.string "background_url"
+    t.string "conversable_id", null: false
+    t.string "conversable_type", null: false
+    t.datetime "created_at", null: false
+    t.integer "position"
+    t.datetime "updated_at", null: false
+    t.index ["conversable_type", "conversable_id"], name: "index_conversations_on_conversable_type_and_conversable_id"
+  end
+
+  create_table "gifts", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.integer "exp", default: 0, null: false
+    t.integer "gold", default: 0, null: false
+    t.string "name", null: false
+    t.string "opponent_slug", null: false
+    t.datetime "updated_at", null: false
+    t.index ["opponent_slug"], name: "index_gifts_on_opponent_slug"
+  end
+
+  create_table "items", primary_key: "slug", id: :string, force: :cascade do |t|
+    t.integer "base_damage"
+    t.integer "base_defense"
+    t.string "category", null: false
+    t.datetime "created_at", null: false
+    t.text "enhancements", default: "[]", null: false
+    t.string "icon", null: false
+    t.string "name", null: false
+    t.string "quality", default: "normal", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "moves", primary_key: "slug", id: :string, force: :cascade do |t|
@@ -98,4 +150,5 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_18_110343) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "chats", "conversations"
 end

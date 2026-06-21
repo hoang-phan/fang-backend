@@ -6,6 +6,10 @@ class Opponent < ApplicationRecord
   has_many :opponent_moves, -> { order(:position) },
            foreign_key: :opponent_slug, primary_key: :slug, dependent: :destroy
   has_many :moves, through: :opponent_moves
+  has_many :cinematics, -> { order(:level) },
+           foreign_key: :opponent_slug, primary_key: :slug, dependent: :destroy
+  has_many :gifts, foreign_key: :opponent_slug, primary_key: :slug, dependent: :destroy
+  has_many :conversations, as: :conversable, dependent: :destroy
 
   validates :slug, presence: true, uniqueness: true,
                    format: { with: /\A[a-zA-Z0-9_]+\z/, message: "only letters, numbers, underscores" }

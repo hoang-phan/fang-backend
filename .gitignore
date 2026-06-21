@@ -34,3 +34,4 @@
 .claude
 public/*
 !/public/robots.txt
+db/seeds/opponents.yml

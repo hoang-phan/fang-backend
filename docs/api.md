@@ -53,7 +53,84 @@ Matches the frontend `OpponentDef` interface exactly.
   "unlockAfter": ["goblin", "witch"],  // opponent slugs
   "moves": [ /* 0–4 Move objects, ordered by position */ ],
   "avatars": ["/images/opponents/drake/avatar_1.webp", "…"],  // up to 5 public-folder URLs, one per opponent level
-  "cinematics": ["/images/opponents/drake/cinematic_1.webp", "…"]  // up to 5 public-folder URLs
+  "cinematics": [                // ordered by level
+    {
+      "level": 1,
+      "description": "Drake awakens.",
+      // always present — array of conversations ordered by position:
+      "conversations": [
+        { "id": 2, "chats": [ /* Chat[] */ ], "backgroundUrl": "/images/opponents/drake/cinematic_1.webp", "position": 0 }
+      ]
+    }
+  ],
+  "gifts": [                     // ordered by name — all gifts for this opponent
+    {
+      "id": 1, "name": "Gold Pendant", "gold": 100, "exp": 50,
+      // always present — array of conversations ordered by position:
+      "conversations": [
+        { "id": 3, "chats": [ /* Chat[] */ ], "position": 0 }
+      ]
+    }
+  ],
+  "conversations": [             // opponent-level chat conversations (ordered by id)
+    { "id": 4, "chats": [ /* Chat[] */ ] }
+  ]
+}
+```
+
+### Item object
+
+```jsonc
+{
+  "id": "ironSword",
+  "name": "Iron Sword",
+  "icon": "🗡️",
+  "category": "weapon",          // one of ItemCategory
+  "quality": "normal",           // "rude" | "normal" | "rare" | "legendary"
+  "baseDamage": 12,              // optional — weapon only
+  "baseDefense": null,           // optional — omitted when null
+  "enhancements": [              // array of Enhancement objects
+    { "type": "damageBoost", "value": 5 }
+  ]
+}
+```
+
+### Gift object
+
+```jsonc
+{
+  "id": 1,                   // integer auto-PK
+  "opponentId": "goblin",    // opponent slug
+  "name": "Gold Pendant",
+  "gold": 100,
+  "exp": 50,
+  // always present — array of conversations ordered by position:
+  "conversations": [ { "id": 1, "chats": [ /* Chat[] */ ], "position": 0 } ]
+}
+```
+
+### Conversation object
+
+```jsonc
+{
+  "id": 1,
+  "chats": [
+    { "avatar": "hero",     "position": 0, "content": "Thank you for the gift!" },
+    { "avatar": "opponent", "position": 1, "content": "It's nothing, really." }
+  ],
+  // optional — only present when set:
+  "backgroundUrl": "/illyasviel/cinematic1.webp", // background image for the scene
+  "position": 0                                   // display order (cinematics/gifts only; sequential)
+}
+```
+
+### Chat object
+
+```jsonc
+{
+  "avatar":   "hero",                   // speaker identifier
+  "position": 0,                        // ordering index within the conversation
+  "content":  "Thank you for the gift!" // dialogue text
 }
 ```
 
@@ -169,12 +246,12 @@ opponent[avatar_2]          string
 opponent[avatar_3]          string
 opponent[avatar_4]          string
 opponent[avatar_5]          string
-opponent[cinematic_1]       string   public-folder path
-opponent[cinematic_2]       string
-opponent[cinematic_3]       string
-opponent[cinematic_4]       string
-opponent[cinematic_5]       string
+opponent[cinematics][][level]          integer  cinematic level (1-based)
+opponent[cinematics][][background_url] string   public-folder path for the background image (stored on the conversation)
+opponent[cinematics][][description]    string   optional flavour text
 ```
+
+Passing `opponent[cinematics][]` **replaces all** cinematic records for the opponent.
 
 **Response** `201` — created Opponent object  
 **Response** `422` — validation errors
@@ -222,6 +299,113 @@ Passing `opponent[avatar_N]` / `opponent[cinematic_N]` **replaces** that specifi
 ### DELETE /api/v1/opponents/:id
 Destroys the opponent and all its `opponent_moves` records. Active Storage attachments are purged asynchronously by Rails.
 
+**Response** `204` — no content
+
+---
+
+## Items
+
+### GET /api/v1/items
+Returns all items ordered by name.
+
+**Response** `200`
+```json
+[ /* Item[] */ ]
+```
+
+---
+
+### GET /api/v1/items/:id
+`:id` is the item's slug.
+
+**Response** `200` — Item object  
+**Response** `404` — record not found
+
+---
+
+### POST /api/v1/items
+**Request body** (JSON)
+```jsonc
+{
+  "item": {
+    "slug": "ironSword",        // required, unique, letters/numbers/underscores
+    "name": "Iron Sword",       // required
+    "icon": "🗡️",               // required
+    "category": "weapon",       // required, one of ItemCategory
+    "quality": "normal",        // "rude" | "normal" | "rare" | "legendary"
+    "base_damage": 12,          // optional, >= 0
+    "base_defense": null,       // optional, >= 0
+    "enhancements": [           // optional array of Enhancement objects
+      { "type": "damageBoost", "value": 5 }
+    ]
+  }
+}
+```
+
+**Response** `201` — created Item object  
+**Response** `422` — validation errors
+
+---
+
+### PATCH /PUT /api/v1/items/:id
+Same body shape as POST. All fields optional.
+
+**Response** `200` — updated Item object  
+**Response** `422` — validation errors
+
+---
+
+### DELETE /api/v1/items/:id
+**Response** `204` — no content
+
+---
+
+## Gifts
+
+Gifts are scoped to an opponent. All gift routes are nested under `/api/v1/opponents/:opponent_id/`.
+
+### GET /api/v1/opponents/:opponent_id/gifts
+Returns all gifts for the given opponent ordered by name.
+
+**Response** `200`
+```json
+[ /* Gift[] */ ]
+```
+
+---
+
+### GET /api/v1/opponents/:opponent_id/gifts/:id
+**Response** `200` — Gift object  
+**Response** `404` — record not found
+
+---
+
+### POST /api/v1/opponents/:opponent_id/gifts
+**Request body** (JSON)
+```jsonc
+{
+  "gift": {
+    "name": "Gold Pendant",  // required
+    "gold": 100,             // >= 0, default 0
+    "exp": 50                // >= 0, default 0
+  }
+}
+```
+
+**Response** `201` — created Gift object  
+**Response** `422` — validation errors
+
+---
+
+### PATCH /PUT /api/v1/opponents/:opponent_id/gifts/:id
+Same body shape as POST. All fields optional.
+
+**Response** `200` — updated Gift object  
+**Response** `422` — validation errors
+
+---
+
+### DELETE /api/v1/opponents/:opponent_id/gifts/:id
 **Response** `204` — no content
 
 ---

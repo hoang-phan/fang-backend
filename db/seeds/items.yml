@@ -1,0 +1,408 @@
+# Items seed data.
+# Keys match the Item API response shape.
+# category: one of headgear bodyArmor weapon shield amulet ring charm gauntlets boots
+# quality:  one of rude normal rare legendary
+# baseDamage:  optional, weapon only (>= 0)
+# baseDefense: optional, armour/shield/etc (>= 0)
+# enhancements: array of { type, value, element? } objects (empty array if none)
+#   Enhancement types: damageBoost defenseBoost hpBoost mpBoost hpRegen mpRegen
+#                      elementDamage elementResist goldLootBoost dropChanceBoost
+
+# Weapons
+- id: crackedBlade
+  name: Cracked Blade
+  icon: ⚔️
+  category: weapon
+  quality: rude
+  baseDamage: 3
+  enhancements: []
+
+- id: ironSword
+  name: Iron Sword
+  icon: ⚔️
+  category: weapon
+  quality: normal
+  baseDamage: 8
+  enhancements:
+    - type: damageBoost
+      value: 2
+
+- id: engravdFalchion
+  name: Engraved Falchion
+  icon: ⚔️
+  category: weapon
+  quality: rare
+  baseDamage: 14
+  enhancements:
+    - type: damageBoost
+      value: 5
+    - type: elementDamage
+      value: 4
+      element: fire
+
+- id: doomfang
+  name: Doomfang
+  icon: ⚔️
+  category: weapon
+  quality: legendary
+  baseDamage: 24
+  enhancements:
+    - type: damageBoost
+      value: 12
+    - type: elementDamage
+      value: 10
+      element: dark
+    - type: hpRegen
+      value: 5
+
+# Headgear
+- id: clothHood
+  name: Cloth Hood
+  icon: 🪖
+  category: headgear
+  quality: rude
+  baseDefense: 1
+  enhancements: []
+
+- id: ironHelm
+  name: Iron Helm
+  icon: 🪖
+  category: headgear
+  quality: normal
+  baseDefense: 4
+  enhancements:
+    - type: hpBoost
+      value: 8
+
+- id: runicCirclet
+  name: Runic Circlet
+  icon: 🪖
+  category: headgear
+  quality: rare
+  baseDefense: 7
+  enhancements:
+    - type: hpBoost
+      value: 18
+    - type: mpBoost
+      value: 6
+
+- id: crownOfAges
+  name: Crown of Ages
+  icon: 🪖
+  category: headgear
+  quality: legendary
+  baseDefense: 12
+  enhancements:
+    - type: hpBoost
+      value: 40
+    - type: mpBoost
+      value: 15
+    - type: hpRegen
+      value: 6
+
+# Body Armor
+- id: tornTunic
+  name: Torn Tunic
+  icon: 🥋
+  category: bodyArmor
+  quality: rude
+  baseDefense: 2
+  enhancements: []
+
+- id: chainmail
+  name: Chainmail
+  icon: 🥋
+  category: bodyArmor
+  quality: normal
+  baseDefense: 5
+  enhancements:
+    - type: defenseBoost
+      value: 2
+
+- id: plateCuirass
+  name: Plate Cuirass
+  icon: 🥋
+  category: bodyArmor
+  quality: rare
+  baseDefense: 9
+  enhancements:
+    - type: defenseBoost
+      value: 5
+    - type: hpBoost
+      value: 15
+
+- id: dragonscaleArmor
+  name: Dragonscale Armor
+  icon: 🥋
+  category: bodyArmor
+  quality: legendary
+  baseDefense: 15
+  enhancements:
+    - type: defenseBoost
+      value: 10
+    - type: elementResist
+      value: 15
+      element: fire
+    - type: hpRegen
+      value: 8
+
+# Shield
+- id: buckler
+  name: Buckler
+  icon: 🛡️
+  category: shield
+  quality: rude
+  baseDefense: 1
+  enhancements: []
+
+- id: kiteShield
+  name: Kite Shield
+  icon: 🛡️
+  category: shield
+  quality: normal
+  baseDefense: 4
+  enhancements:
+    - type: defenseBoost
+      value: 2
+
+- id: towerShield
+  name: Tower Shield
+  icon: 🛡️
+  category: shield
+  quality: rare
+  baseDefense: 8
+  enhancements:
+    - type: defenseBoost
+      value: 5
+    - type: hpBoost
+      value: 12
+
+- id: aegisAncients
+  name: Aegis of the Ancients
+  icon: 🛡️
+  category: shield
+  quality: legendary
+  baseDefense: 14
+  enhancements:
+    - type: defenseBoost
+      value: 10
+    - type: hpBoost
+      value: 30
+    - type: mpRegen
+      value: 4
+
+# Gauntlets
+- id: clothWraps
+  name: Cloth Wraps
+  icon: 🥊
+  category: gauntlets
+  quality: rude
+  baseDefense: 1
+  enhancements: []
+
+- id: ironGauntlets
+  name: Iron Gauntlets
+  icon: 🥊
+  category: gauntlets
+  quality: normal
+  baseDefense: 3
+  enhancements:
+    - type: defenseBoost
+      value: 1
+
+- id: runicGrips
+  name: Runic Grips
+  icon: 🥊
+  category: gauntlets
+  quality: rare
+  baseDefense: 6
+  enhancements:
+    - type: defenseBoost
+      value: 3
+    - type: damageBoost
+      value: 3
+
+- id: godfist
+  name: Godfist
+  icon: 🥊
+  category: gauntlets
+  quality: legendary
+  baseDefense: 10
+  enhancements:
+    - type: defenseBoost
+      value: 8
+    - type: damageBoost
+      value: 8
+    - type: hpRegen
+      value: 4
+
+# Boots
+- id: wornSandals
+  name: Worn Sandals
+  icon: 👢
+  category: boots
+  quality: rude
+  baseDefense: 1
+  enhancements: []
+
+- id: ironGreaves
+  name: Iron Greaves
+  icon: 👢
+  category: boots
+  quality: normal
+  baseDefense: 3
+  enhancements:
+    - type: hpBoost
+      value: 6
+
+- id: runicTreads
+  name: Runic Treads
+  icon: 👢
+  category: boots
+  quality: rare
+  baseDefense: 6
+  enhancements:
+    - type: hpBoost
+      value: 14
+    - type: mpRegen
+      value: 2
+
+- id: windwalkers
+  name: Windwalkers
+  icon: 👢
+  category: boots
+  quality: legendary
+  baseDefense: 10
+  enhancements:
+    - type: hpBoost
+      value: 28
+    - type: mpRegen
+      value: 6
+    - type: hpRegen
+      value: 5
+
+# Amulet
+- id: boneBead
+  name: Bone Bead
+  icon: 📿
+  category: amulet
+  quality: rude
+  enhancements: []
+
+- id: silverPendant
+  name: Silver Pendant
+  icon: 📿
+  category: amulet
+  quality: normal
+  enhancements:
+    - type: mpBoost
+      value: 5
+
+- id: runicAmulet
+  name: Runic Amulet
+  icon: 📿
+  category: amulet
+  quality: rare
+  enhancements:
+    - type: mpBoost
+      value: 12
+    - type: elementDamage
+      value: 5
+      element: psychic
+
+- id: eyeOfVoid
+  name: Eye of the Void
+  icon: 📿
+  category: amulet
+  quality: legendary
+  enhancements:
+    - type: mpBoost
+      value: 25
+    - type: elementDamage
+      value: 12
+      element: dark
+    - type: mpRegen
+      value: 6
+
+# Ring
+- id: copperBand
+  name: Copper Band
+  icon: 💍
+  category: ring
+  quality: rude
+  enhancements: []
+
+- id: silverRing
+  name: Silver Ring
+  icon: 💍
+  category: ring
+  quality: normal
+  enhancements:
+    - type: hpBoost
+      value: 7
+
+- id: goldRing
+  name: Gold Ring
+  icon: 💍
+  category: ring
+  quality: rare
+  enhancements:
+    - type: hpBoost
+      value: 16
+    - type: goldLootBoost
+      value: 18
+
+- id: ringOfAncients
+  name: Ring of the Ancients
+  icon: 💍
+  category: ring
+  quality: legendary
+  enhancements:
+    - type: hpBoost
+      value: 35
+    - type: goldLootBoost
+      value: 40
+    - type: dropChanceBoost
+      value: 20
+
+# Charm
+- id: pebble
+  name: Pebble
+  icon: 🔮
+  category: charm
+  quality: rude
+  enhancements: []
+
+- id: minorCharm
+  name: Minor Charm
+  icon: 🔮
+  category: charm
+  quality: normal
+  enhancements:
+    - type: goldLootBoost
+      value: 8
+
+- id: grandCharm
+  name: Grand Charm
+  icon: 🔮
+  category: charm
+  quality: rare
+  enhancements:
+    - type: goldLootBoost
+      value: 20
+    - type: dropChanceBoost
+      value: 10
+
+- id: hellfireCharm
+  name: Hellfire Charm
+  icon: 🔮
+  category: charm
+  quality: legendary
+  enhancements:
+    - type: goldLootBoost
+      value: 45
+    - type: dropChanceBoost
+      value: 25
+    - type: elementDamage
+      value: 10
+      element: fire

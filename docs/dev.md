@@ -92,7 +92,8 @@ Primary key is `slug` (string). Avatar and cinematic URLs are stored directly as
 | xp_reward_defeat   | integer | XP player gets on loss                         |
 | unlock_after       | text    | JSON array of opponent slugs                   |
 | avatar_1–5         | string  | public-folder paths, one per opponent level    |
-| cinematic_1–5      | string  | public-folder paths, one per opponent level    |
+
+`cinematic_1`–`cinematic_5` columns have been replaced by the `Cinematic` association (see below).
 
 `unlock_after` is stored as a JSON string. Use the model helpers:
 ```ruby
@@ -101,6 +102,74 @@ opponent.unlock_after_list = [...] # sets and serialises
 ```
 
 Place image files under `public/images/opponents/<slug>/avatar_N.webp` etc. The URLs are returned as-is in the API response — prefix with the server origin on the frontend.
+
+### Cinematic
+Belongs to an Opponent via `opponent_slug`. Replaces the old `cinematic_1`–`cinematic_5` string columns.
+
+| column        | type    | notes                                      |
+|---------------|---------|--------------------------------------------|
+| id            | integer | auto PK                                    |
+| opponent_slug | string  | FK → opponents.slug                        |
+| level         | integer | 1-based, unique per opponent               |
+| description   | text    | nullable flavour text shown with cinematic |
+
+Unique index on `(opponent_slug, level)`.
+
+The background image URL previously stored on Cinematic is now stored as `background_url` on the associated Conversation.
+
+### Item
+Primary key is `slug`. Mirrors the frontend `EquipmentItem` interface.
+
+| column       | type    | notes                                              |
+|--------------|---------|----------------------------------------------------|
+| slug         | string  | PK                                                 |
+| name         | string  |                                                    |
+| icon         | string  | emoji                                              |
+| category     | string  | one of `Item::CATEGORIES`                          |
+| quality      | string  | one of `Item::QUALITIES`                           |
+| base_damage  | integer | nullable; weapon only                              |
+| base_defense | integer | nullable; armour/shield/etc.                       |
+| enhancements | text    | JSON array of `{ type, value, element? }` objects  |
+
+Valid `category` values: `headgear bodyArmor weapon shield amulet ring charm gauntlets boots`  
+Valid `quality` values: `rude normal rare legendary`
+
+Use `item.enhancements_list` / `item.enhancements_list=` to read/write the JSON array.
+
+### Gift
+Belongs to an Opponent via `opponent_slug`. Auto integer PK.
+
+| column        | type    | notes                   |
+|---------------|---------|-------------------------|
+| id            | integer | auto PK                 |
+| opponent_slug | string  | FK → opponents.slug     |
+| name          | string  |                         |
+| gold          | integer | >= 0, default 0         |
+| exp           | integer | >= 0, default 0         |
+
+### Conversation
+Polymorphic — belongs to Opponent (`has_many`), Gift (`has_many`), or Cinematic (`has_many`). Auto integer PK.
+
+| column           | type    | notes                                                        |
+|------------------|---------|--------------------------------------------------------------|
+| id               | integer | auto PK                                                      |
+| conversable_type | string  | "Opponent", "Gift", or "Cinematic"                           |
+| conversable_id   | string  | FK to the conversable record                                 |
+| background_url   | string  | nullable; public-folder path for the scene background image  |
+| position         | integer | nullable; display order for cinematic/gift conversations     |
+
+Cinematic and Gift conversations are displayed sequentially ordered by `position`. Opponent conversations are picked randomly.
+
+### Chat
+Belongs to Conversation. Ordered by `position`.
+
+| column          | type    | notes                                       |
+|-----------------|---------|---------------------------------------------|
+| id              | integer | auto PK                                     |
+| conversation_id | integer | FK → conversations.id                       |
+| avatar          | string  | speaker identifier (e.g. "hero", "goblin")  |
+| position        | integer | ordering index within the conversation       |
+| content         | text    | dialogue text                               |
 
 ### OpponentMove (join table)
 Links an opponent to its moves with an explicit position (0–3).
@@ -139,7 +208,18 @@ Controllers serialise to camelCase to match the frontend interfaces. The mapping
 | `xp_reward_victory/defeat` | `xpReward`        | serialised as `[victory, defeat]`              |
 | `unlock_after_list`        | `unlockAfter`     |                                                |
 | `avatar_1`–`avatar_5`      | `avatars`         | compact array of non-null values               |
-| `cinematic_1`–`cinematic_5`| `cinematics`      | compact array of non-null values               |
+| `cinematic association`    | `cinematics`      | array of `{ level, description? }` objects — background URL is on the conversation |
+| `item.slug`                | `id`              | items resource                                 |
+| `item.base_damage`         | `baseDamage`      | omitted when null                              |
+| `item.base_defense`        | `baseDefense`     | omitted when null                              |
+| `item.enhancements_list`   | `enhancements`    | JSON array                                     |
+| `gift.slug`                | `id`              | gifts resource                                 |
+| `conversation.id`          | `id`              | conversations resource                         |
+| `conversation.background_url` | `backgroundUrl` | omitted when null                             |
+| `conversation.position`    | `position`        | omitted when null; ordering for cinematic/gift |
+| `chat.avatar`              | `avatar`          |                                                |
+| `chat.position`            | `position`        |                                                |
+| `chat.content`             | `content`         |                                                |
 
 `move.icon` is **not** serialised — the frontend uses the `type` field to derive the icon.
 

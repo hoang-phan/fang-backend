@@ -4,7 +4,7 @@ module Api
       before_action :set_opponent, only: %i[show update destroy]
 
       def index
-        @opponents = Opponent.includes(:moves).all.order(:name)
+        @opponents = Opponent.includes(:moves, { cinematics: { conversations: :chats } }, { gifts: { conversations: :chats } }, { conversations: :chats }).all.order(:name)
         render json: @opponents.map { |o| serialize_opponent(o) }
       end
 
@@ -16,6 +16,7 @@ module Api
         @opponent = Opponent.new(opponent_params)
         @opponent.unlock_after_list = params.dig(:opponent, :unlock_after) || []
         assign_moves(@opponent) if params.dig(:opponent, :move_slugs)
+        assign_cinematics(@opponent) if params.dig(:opponent, :cinematics)
 
         if @opponent.save
           render json: serialize_opponent(@opponent), status: :created
@@ -28,6 +29,7 @@ module Api
         @opponent.assign_attributes(opponent_params)
         @opponent.unlock_after_list = params.dig(:opponent, :unlock_after) if params.dig(:opponent, :unlock_after)
         assign_moves(@opponent) if params.dig(:opponent, :move_slugs)
+        assign_cinematics(@opponent) if params.dig(:opponent, :cinematics)
 
         if @opponent.save
           render json: serialize_opponent(@opponent)
@@ -44,7 +46,7 @@ module Api
       private
 
       def set_opponent
-        @opponent = Opponent.includes(:moves).find(params[:id])
+        @opponent = Opponent.includes(:moves, { cinematics: { conversations: :chats } }, { gifts: { conversations: :chats } }, { conversations: :chats }).find(params[:id])
       end
 
       def opponent_params
@@ -52,8 +54,7 @@ module Api
                                    :base_damage, :damage_variance, :gold_reward_min,
                                    :gold_reward_max, :flavour_text, :level,
                                    :xp_reward_victory, :xp_reward_defeat,
-                                   :avatar_1, :avatar_2, :avatar_3, :avatar_4, :avatar_5,
-                                   :cinematic_1, :cinematic_2, :cinematic_3, :cinematic_4, :cinematic_5 ])
+                                   :avatar_1, :avatar_2, :avatar_3, :avatar_4, :avatar_5 ])
       end
 
       def assign_moves(opponent)
@@ -64,27 +65,72 @@ module Api
         end
       end
 
+      def assign_cinematics(opponent)
+        cinematic_data = Array(params.dig(:opponent, :cinematics))
+        opponent.cinematics.destroy_all if opponent.persisted?
+        cinematic_data.each_with_index do |c, i|
+          cinematic = opponent.cinematics.build(
+            level:       c[:level].to_i,
+            description: c[:description]
+          )
+          if c[:background_url].present?
+            cinematic.conversations.build(background_url: c[:background_url], position: 0)
+          end
+        end
+      end
+
       def serialize_opponent(opponent)
         moves_by_pos = opponent.opponent_moves.sort_by(&:position).map { |om|
           serialize_move(om.move)
         }
 
         {
-          id: opponent.slug,
-          name: opponent.name,
-          type: opponent.element_type,
-          maxHp: opponent.max_hp,
-          baseDamage: opponent.base_damage,
+          id:            opponent.slug,
+          name:          opponent.name,
+          type:          opponent.element_type,
+          maxHp:         opponent.max_hp,
+          baseDamage:    opponent.base_damage,
           damageVariance: opponent.damage_variance,
-          goldReward: [ opponent.gold_reward_min, opponent.gold_reward_max ],
-          flavourText: opponent.flavour_text,
-          level: opponent.level,
-          xpReward: [ opponent.xp_reward_victory, opponent.xp_reward_defeat ],
-          unlockAfter: opponent.unlock_after_list,
-          moves: moves_by_pos,
-          avatars: (1..5).map { |n| opponent.public_send(:"avatar_#{n}") }.compact,
-          cinematics: (1..5).map { |n| opponent.public_send(:"cinematic_#{n}") }.compact
+          goldReward:    [ opponent.gold_reward_min, opponent.gold_reward_max ],
+          flavourText:   opponent.flavour_text,
+          level:         opponent.level,
+          xpReward:      [ opponent.xp_reward_victory, opponent.xp_reward_defeat ],
+          unlockAfter:   opponent.unlock_after_list,
+          moves:         moves_by_pos,
+          avatars:       (1..5).map { |n| opponent.public_send(:"avatar_#{n}") }.compact,
+          cinematics:    opponent.cinematics.sort_by(&:level).map { |c| serialize_cinematic(c) },
+          gifts:         opponent.gifts.sort_by(&:name).map { |g| serialize_gift(g) },
+          conversations: opponent.conversations.map { |c| serialize_conversation(c) }
         }
+      end
+
+      def serialize_cinematic(cinematic)
+        h = { level: cinematic.level }
+        h[:description] = cinematic.description if cinematic.description.present?
+        if cinematic.association(:conversations).loaded?
+          h[:conversations] = cinematic.conversations.map { |c| serialize_conversation(c) }
+        end
+        h
+      end
+
+      def serialize_gift(gift)
+        h = { id: gift.id, name: gift.name, gold: gift.gold, exp: gift.exp }
+        if gift.association(:conversations).loaded?
+          h[:conversations] = gift.conversations.map { |c| serialize_conversation(c) }
+        end
+        h
+      end
+
+      def serialize_conversation(conversation)
+        return nil unless conversation
+        h = { id: conversation.id, chats: conversation.chats.map { |c| serialize_chat(c) } }
+        h[:backgroundUrl] = conversation.background_url if conversation.background_url.present?
+        h[:position] = conversation.position unless conversation.position.nil?
+        h
+      end
+
+      def serialize_chat(chat)
+        { avatar: chat.avatar, position: chat.position, content: chat.content }
       end
 
       def serialize_move(move)

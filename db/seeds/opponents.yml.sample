@@ -1,0 +1,328 @@
+# Opponents seed data.
+# Format mirrors the Opponent API response shape (camelCase keys) for easy reading,
+# with a few additions needed only for seeding:
+#   - moves: array of move slugs in battle-slot order (position 0-3)
+#   - avatars: array of public-folder paths (up to 5, one per level)
+#   - cinematics[].conversations[].backgroundUrl: background image for that conversation
+#   - cinematics[].conversations[]: array of conversations (ordered by position) for this cinematic
+#   - gifts[].conversations[]: array of conversations (ordered by position) for this gift
+#   - conversations: array of opponent-level chat conversations (picked randomly in-game)
+#
+# goldReward: [min, max]
+# xpReward:   [victoryXp, defeatXp]
+# unlockAfter: array of opponent slugs that must be defeated first
+
+- id: illyasviel
+  name: Illyasviel von Einzbern
+  type: psychic
+  maxHp: 50
+  baseDamage: 8
+  damageVariance: 0.20
+  goldReward: [5, 15]
+  xpReward: [50, 10]
+  level: 1
+  flavourText: Master of Berserker
+  unlockAfter: []
+  moves:
+    - psychicWave
+    - psychicShield
+    - psychicBlade
+    - insomnia
+  avatars:
+    - /illyasviel/avatar1.jpg
+    - /illyasviel/avatar2.jpg
+    - /illyasviel/avatar3.jpg
+    - /illyasviel/avatar4.jpg
+    - /illyasviel/avatar5.jpg
+  cinematics:
+    - level: 1
+      conversations:
+        - backgroundUrl: /illyasviel/cinematic1.webp
+          chats:
+            - avatar: illyasviel
+              position: 0
+              content: So you've come this far. Surprising.
+            - avatar: hero
+              position: 1
+              content: I had a good reason to.
+    - level: 2
+      conversations:
+        - backgroundUrl: /illyasviel/cinematic2.webp
+          chats:
+            - avatar: illyasviel
+              position: 0
+              content: You're not afraid of me, are you?
+            - avatar: hero
+              position: 1
+              content: Should I be?
+            - avatar: illyasviel
+              position: 2
+              content: Most people are. I find it... refreshing that you aren't.
+    - level: 3
+      conversations:
+        - backgroundUrl: /illyasviel/cinematic3.webp
+          chats:
+            - avatar: illyasviel
+              position: 0
+              content: Berserker asked about you.
+            - avatar: hero
+              position: 1
+              content: What did he say?
+            - avatar: illyasviel
+              position: 2
+              content: He grunted. That means he approves.
+    - level: 4
+      conversations:
+        - backgroundUrl: /illyasviel/cinematic4.webp
+          chats:
+            - avatar: hero
+              position: 0
+              content: You looked worried today, in the fight.
+            - avatar: illyasviel
+              position: 1
+              content: I was making sure you didn't do anything reckless.
+            - avatar: illyasviel
+              position: 2
+              content: Don't take it to mean anything.
+    - level: 5
+      conversations:
+        - backgroundUrl: /illyasviel/cinematic5.webp
+          chats:
+            - avatar: illyasviel
+              position: 0
+              content: You know, for a human, you're not completely hopeless.
+            - avatar: hero
+              position: 1
+              content: High praise, coming from you.
+            - avatar: illyasviel
+              position: 2
+              content: Don't push it.
+  gifts:
+    - name: Tulip Bouquet
+      gold: 20
+      exp: 20
+      conversations:
+        - chats:
+            - avatar: hero
+              position: 0
+              content: I brought you something. Tulips.
+            - avatar: illyasviel
+              position: 1
+              content: "...White ones? Those are my favourite."
+            - avatar: hero
+              position: 2
+              content: I know.
+            - avatar: illyasviel
+              position: 3
+              content: Don't smile like that. It's embarrassing.
+    - name: Chocolate Box
+      gold: 30
+      exp: 40
+      conversations:
+        - chats:
+            - avatar: hero
+              position: 0
+              content: Belgian chocolate. Dark.
+            - avatar: illyasviel
+              position: 1
+              content: You remembered I don't like milk chocolate.
+            - avatar: illyasviel
+              position: 2
+              content: I'll share — but only because I feel generous today.
+    - name: Magic Mugs
+      gold: 50
+      exp: 80
+      conversations:
+        - chats:
+            - avatar: illyasviel
+              position: 0
+              content: These change colour when they're hot?
+            - avatar: hero
+              position: 1
+              content: They show constellations. I thought you'd like the stars.
+            - avatar: illyasviel
+              position: 2
+              content: "...I do. Don't make a big deal of it."
+  conversations:
+    - chats:
+        - avatar: illyasviel
+          position: 0
+          content: You're here again. I suppose I'll allow it.
+        - avatar: hero
+          position: 1
+          content: Always. You're hard to stay away from.
+        - avatar: illyasviel
+          position: 2
+          content: Hmph. Don't read into it.
+    - chats:
+        - avatar: hero
+          position: 0
+          content: How do you stay so calm before a battle?
+        - avatar: illyasviel
+          position: 1
+          content: When you've fought a Berserker, everything else feels slow.
+        - avatar: illyasviel
+          position: 2
+          content: Besides — you're not nearly as scary as Berserker.
+        - avatar: hero
+          position: 3
+          content: I'll try not to take that personally.
+
+- id: virtuosa
+  name: Virtuosa
+  type: dark
+  maxHp: 55
+  baseDamage: 10
+  damageVariance: 0.15
+  goldReward: [7, 20]
+  xpReward: [60, 20]
+  level: 1
+  flavourText: Agent of the Black Forest
+  unlockAfter: []
+  moves:
+    - shadowClaw
+    - nightShade
+    - voidPulse
+    - soulDrain
+  avatars:
+    - /virtuosa/avatar1.jpg
+    - /virtuosa/avatar2.jpg
+    - /virtuosa/avatar3.jpg
+    - /virtuosa/avatar4.jpg
+    - /virtuosa/avatar5.jpg
+  cinematics:
+    - level: 1
+      conversations:
+        - backgroundUrl: /virtuosa/cinematic1.webp
+          chats:
+            - avatar: virtuosa
+              position: 0
+              content: You survived the forest. Good. Weak visitors bore me.
+    - level: 2
+      conversations:
+        - backgroundUrl: /virtuosa/cinematic2.webp
+          chats:
+            - avatar: virtuosa
+              position: 0
+              content: I played for the Black Forest council last night.
+            - avatar: hero
+              position: 1
+              content: And?
+            - avatar: virtuosa
+              position: 2
+              content: They wept. They always weep. It's the only honest thing about them.
+    - level: 3
+      conversations:
+        - backgroundUrl: /virtuosa/cinematic3.webp
+          chats:
+            - avatar: hero
+              position: 0
+              content: Teach me something.
+            - avatar: virtuosa
+              position: 1
+              content: Music or combat?
+            - avatar: hero
+              position: 2
+              content: Surprise me.
+            - avatar: virtuosa
+              position: 3
+              content: Dangerous answer. I like it.
+    - level: 4
+      conversations:
+        - backgroundUrl: /virtuosa/cinematic4.webp
+          chats:
+            - avatar: virtuosa
+              position: 0
+              content: The forest is restless tonight. I can hear it.
+            - avatar: hero
+              position: 1
+              content: Should I be worried?
+            - avatar: virtuosa
+              position: 2
+              content: Only if you're alone. Stay close.
+    - level: 5
+      conversations:
+        - backgroundUrl: /virtuosa/cinematic5.webp
+          chats:
+            - avatar: virtuosa
+              position: 0
+              content: You've become something of a fixture here.
+            - avatar: hero
+              position: 1
+              content: Is that a problem?
+            - avatar: virtuosa
+              position: 2
+              content: No. The forest has accepted you. And so have I.
+  gifts:
+    - name: Rose
+      gold: 15
+      exp: 30
+      conversations:
+        - chats:
+            - avatar: hero
+              position: 0
+              content: A single black rose. Felt appropriate.
+            - avatar: virtuosa
+              position: 1
+              content: You have taste. Most bring red — so predictable.
+            - avatar: virtuosa
+              position: 2
+              content: I'll press it. A rare honour.
+    - name: Biscuit Box
+      gold: 25
+      exp: 50
+      conversations:
+        - chats:
+            - avatar: hero
+              position: 0
+              content: Assorted biscuits. From the city bakery.
+            - avatar: virtuosa
+              position: 1
+              content: The lemon creams?
+            - avatar: hero
+              position: 2
+              content: Bottom left corner.
+            - avatar: virtuosa
+              position: 3
+              content: You planned this. I respect that.
+    - name: Coffee Mug
+      gold: 35
+      exp: 70
+      conversations:
+        - chats:
+            - avatar: virtuosa
+              position: 0
+              content: A mug with sheet music printed on it.
+            - avatar: hero
+              position: 1
+              content: Moonlight Sonata. Seemed like you.
+            - avatar: virtuosa
+              position: 2
+              content: It is me. Unsettlingly so.
+  conversations:
+    - chats:
+        - avatar: virtuosa
+          position: 0
+          content: You seek an audience with me? Bold.
+        - avatar: hero
+          position: 1
+          content: Or just curious.
+        - avatar: virtuosa
+          position: 2
+          content: "Curiosity gets people killed in the Black Forest. Lucky for you, I'm in a generous mood."
+    - chats:
+        - avatar: hero
+          position: 0
+          content: Do you ever regret working for them?
+        - avatar: virtuosa
+          position: 1
+          content: Regret is a luxury for those without purpose.
+        - avatar: virtuosa
+          position: 2
+          content: I have my music. That's enough.
+        - avatar: hero
+          position: 3
+          content: Is it?
+        - avatar: virtuosa
+          position: 4
+          content: "...Ask me again sometime."

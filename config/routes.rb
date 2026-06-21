@@ -3,8 +3,11 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      resources :moves, param: :id
-      resources :opponents, param: :id
+      resources :moves,     param: :id
+      resources :opponents, param: :id do
+        resources :gifts, only: %i[index show create update destroy]
+      end
+      resources :items, param: :id
     end
   end
 end
