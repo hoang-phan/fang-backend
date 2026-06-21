@@ -2,6 +2,22 @@ require "yaml"
 
 SEEDS_DIR = Rails.root.join("db", "seeds")
 
+def create_chat(conversation, chat_params)
+  chat = conversation.chats.create!(chat_params.except(:sprites))
+  chat_params[:sprites].to_a.each do |sprite_params|
+    chat.sprites.create!(sprite_params)
+  end
+  chat
+end
+
+def create_conversation(conversable, conversation_params)
+  conversation = conversable.conversations.create!(conversation_params.except(:chats))
+  conversation_params[:chats].to_a.each_with_index do |chat_params, pos|
+    create_chat(conversation, chat_params.merge(position: pos))
+  end
+  conversation
+end
+
 # ─── Moves ───────────────────────────────────────────────────────────────────
 
 moves_data = YAML.load_file(SEEDS_DIR.join("moves.yml"), symbolize_names: true)
@@ -25,15 +41,15 @@ opponents_data.each do |data|
   opponent.assign_attributes(
     name:               data[:name],
     element_type:       data[:type],
-    max_hp:             data[:maxHp],
-    base_damage:        data[:baseDamage],
-    damage_variance:    data[:damageVariance],
-    gold_reward_min:    data[:goldReward][0],
-    gold_reward_max:    data[:goldReward][1],
-    flavour_text:       data[:flavourText],
+    max_hp:             data[:max_hp],
+    base_damage:        data[:base_damage],
+    damage_variance:    data[:damage_variance],
+    gold_reward_min:    data[:gold_reward][0],
+    gold_reward_max:    data[:gold_reward][1],
+    flavour_text:       data[:flavour_text],
     level:              data[:level],
-    xp_reward_victory:  data[:xpReward][0],
-    xp_reward_defeat:   data[:xpReward][1],
+    xp_reward_victory:  data[:xp_reward][0],
+    xp_reward_defeat:   data[:xp_reward][1],
     avatar_1:           data.dig(:avatars, 0),
     avatar_2:           data.dig(:avatars, 1),
     avatar_3:           data.dig(:avatars, 2),
@@ -52,30 +68,21 @@ opponents_data.each do |data|
   (data[:cinematics] || []).each do |c|
     cinematic = opponent.cinematics.create!(level: c[:level], description: c[:description])
     (c[:conversations] || []).each_with_index do |conv_data, pos|
-      conv = cinematic.conversations.create!(background_url: conv_data[:backgroundUrl].presence, position: pos)
-      (conv_data[:chats] || []).each do |chat|
-        conv.chats.create!(avatar: chat[:avatar].to_s, position: chat[:position], content: chat[:content])
-      end
+      create_conversation(cinematic, conv_data.merge(position: pos))
     end
   end
 
   opponent.gifts.destroy_all
   (data[:gifts] || []).each do |g|
     gift = opponent.gifts.create!(name: g[:name], gold: g[:gold], exp: g[:exp])
-    (g[:conversations] || []).each_with_index do |conv_data, pos|
-      conv = gift.conversations.create!(position: pos)
-      (conv_data[:chats] || []).each do |chat|
-        conv.chats.create!(avatar: chat[:avatar].to_s, position: chat[:position], content: chat[:content])
-      end
+    (g[:conversations] || []).each do |conv_data|
+      create_conversation(gift, conv_data)
     end
   end
 
   opponent.conversations.destroy_all
-  (data[:conversations] || []).each do |convo|
-    conv = opponent.conversations.create!
-    (convo[:chats] || []).each do |chat|
-      conv.chats.create!(avatar: chat[:avatar].to_s, position: chat[:position], content: chat[:content])
-    end
+  (data[:conversations] || []).each do |conv_data|
+    create_conversation(opponent, conv_data)
   end
 
   print "."
@@ -88,14 +95,7 @@ items_data = YAML.load_file(SEEDS_DIR.join("items.yml"), symbolize_names: true)
 
 items_data.each do |data|
   Item.find_or_initialize_by(slug: data[:id]).tap do |item|
-    item.assign_attributes(
-      name:         data[:name],
-      icon:         data[:icon],
-      category:     data[:category],
-      quality:      data[:quality],
-      base_damage:  data[:baseDamage],
-      base_defense: data[:baseDefense]
-    )
+    item.assign_attributes(data.slice(:name, :icon, :category, :quality, :base_damage, :base_defense))
     item.enhancements_list = (data[:enhancements] || []).map do |e|
       e.transform_keys(&:to_s)
     end

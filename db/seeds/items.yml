@@ -2,8 +2,8 @@
 # Keys match the Item API response shape.
 # category: one of headgear bodyArmor weapon shield amulet ring charm gauntlets boots
 # quality:  one of rude normal rare legendary
-# baseDamage:  optional, weapon only (>= 0)
-# baseDefense: optional, armour/shield/etc (>= 0)
+# base_damage:  optional, weapon only (>= 0)
+# base_defense: optional, armour/shield/etc (>= 0)
 # enhancements: array of { type, value, element? } objects (empty array if none)
 #   Enhancement types: damageBoost defenseBoost hpBoost mpBoost hpRegen mpRegen
 #                      elementDamage elementResist goldLootBoost dropChanceBoost
@@ -14,7 +14,7 @@
   icon: ⚔️
   category: weapon
   quality: rude
-  baseDamage: 3
+  base_damage: 3
   enhancements: []
 
 - id: ironSword
@@ -22,7 +22,7 @@
   icon: ⚔️
   category: weapon
   quality: normal
-  baseDamage: 8
+  base_damage: 8
   enhancements:
     - type: damageBoost
       value: 2
@@ -32,7 +32,7 @@
   icon: ⚔️
   category: weapon
   quality: rare
-  baseDamage: 14
+  base_damage: 14
   enhancements:
     - type: damageBoost
       value: 5
@@ -45,7 +45,7 @@
   icon: ⚔️
   category: weapon
   quality: legendary
-  baseDamage: 24
+  base_damage: 24
   enhancements:
     - type: damageBoost
       value: 12
@@ -61,7 +61,7 @@
   icon: 🪖
   category: headgear
   quality: rude
-  baseDefense: 1
+  base_defense: 1
   enhancements: []
 
 - id: ironHelm
@@ -69,7 +69,7 @@
   icon: 🪖
   category: headgear
   quality: normal
-  baseDefense: 4
+  base_defense: 4
   enhancements:
     - type: hpBoost
       value: 8
@@ -79,7 +79,7 @@
   icon: 🪖
   category: headgear
   quality: rare
-  baseDefense: 7
+  base_defense: 7
   enhancements:
     - type: hpBoost
       value: 18
@@ -91,7 +91,7 @@
   icon: 🪖
   category: headgear
   quality: legendary
-  baseDefense: 12
+  base_defense: 12
   enhancements:
     - type: hpBoost
       value: 40
@@ -106,7 +106,7 @@
   icon: 🥋
   category: bodyArmor
   quality: rude
-  baseDefense: 2
+  base_defense: 2
   enhancements: []
 
 - id: chainmail
@@ -114,7 +114,7 @@
   icon: 🥋
   category: bodyArmor
   quality: normal
-  baseDefense: 5
+  base_defense: 5
   enhancements:
     - type: defenseBoost
       value: 2
@@ -124,7 +124,7 @@
   icon: 🥋
   category: bodyArmor
   quality: rare
-  baseDefense: 9
+  base_defense: 9
   enhancements:
     - type: defenseBoost
       value: 5
@@ -136,7 +136,7 @@
   icon: 🥋
   category: bodyArmor
   quality: legendary
-  baseDefense: 15
+  base_defense: 15
   enhancements:
     - type: defenseBoost
       value: 10
@@ -152,7 +152,7 @@
   icon: 🛡️
   category: shield
   quality: rude
-  baseDefense: 1
+  base_defense: 1
   enhancements: []
 
 - id: kiteShield
@@ -160,7 +160,7 @@
   icon: 🛡️
   category: shield
   quality: normal
-  baseDefense: 4
+  base_defense: 4
   enhancements:
     - type: defenseBoost
       value: 2
@@ -170,7 +170,7 @@
   icon: 🛡️
   category: shield
   quality: rare
-  baseDefense: 8
+  base_defense: 8
   enhancements:
     - type: defenseBoost
       value: 5
@@ -182,7 +182,7 @@
   icon: 🛡️
   category: shield
   quality: legendary
-  baseDefense: 14
+  base_defense: 14
   enhancements:
     - type: defenseBoost
       value: 10
@@ -197,7 +197,7 @@
   icon: 🥊
   category: gauntlets
   quality: rude
-  baseDefense: 1
+  base_defense: 1
   enhancements: []
 
 - id: ironGauntlets
@@ -205,7 +205,7 @@
   icon: 🥊
   category: gauntlets
   quality: normal
-  baseDefense: 3
+  base_defense: 3
   enhancements:
     - type: defenseBoost
       value: 1
@@ -215,7 +215,7 @@
   icon: 🥊
   category: gauntlets
   quality: rare
-  baseDefense: 6
+  base_defense: 6
   enhancements:
     - type: defenseBoost
       value: 3
@@ -227,7 +227,7 @@
   icon: 🥊
   category: gauntlets
   quality: legendary
-  baseDefense: 10
+  base_defense: 10
   enhancements:
     - type: defenseBoost
       value: 8
@@ -242,7 +242,7 @@
   icon: 👢
   category: boots
   quality: rude
-  baseDefense: 1
+  base_defense: 1
   enhancements: []
 
 - id: ironGreaves
@@ -250,7 +250,7 @@
   icon: 👢
   category: boots
   quality: normal
-  baseDefense: 3
+  base_defense: 3
   enhancements:
     - type: hpBoost
       value: 6
@@ -260,7 +260,7 @@
   icon: 👢
   category: boots
   quality: rare
-  baseDefense: 6
+  base_defense: 6
   enhancements:
     - type: hpBoost
       value: 14
@@ -272,7 +272,7 @@
   icon: 👢
   category: boots
   quality: legendary
-  baseDefense: 10
+  base_defense: 10
   enhancements:
     - type: hpBoost
       value: 28
