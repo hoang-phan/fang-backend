@@ -125,6 +125,7 @@ module Api
         return nil unless conversation
         h = { id: conversation.id, chats: conversation.chats.map { |c| serialize_chat(c) } }
         h[:backgroundUrl] = conversation.background_url if conversation.background_url.present?
+        h[:backgroundColor] = conversation.background_color if conversation.background_color.present?
         h[:position] = conversation.position unless conversation.position.nil?
         h
       end

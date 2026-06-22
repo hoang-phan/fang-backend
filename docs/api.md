@@ -59,7 +59,7 @@ Matches the frontend `OpponentDef` interface exactly.
       "description": "Drake awakens.",
       // always present — array of conversations ordered by position:
       "conversations": [
-        { "id": 2, "chats": [ /* Chat[] */ ], "backgroundUrl": "/images/opponents/drake/cinematic_1.webp", "position": 0 }
+        { "id": 2, "chats": [ /* Chat[] */ ], "backgroundUrl": "/images/opponents/drake/cinematic_1.webp", "backgroundColor": "#ccc", "position": 0 }
       ]
     }
   ],
@@ -134,6 +134,7 @@ Sprites are displayed as characters inside a scene (e.g. a character standing in
   ],
   // optional — only present when set:
   "backgroundUrl": "/illyasviel/cinematic1.webp", // background image for the scene
+  "backgroundColor": "#ccc", // background color for the scene
   "position": 0                                   // display order (cinematics/gifts only; sequential)
 }
 ```
