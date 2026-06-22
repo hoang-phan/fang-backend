@@ -68,10 +68,11 @@ module Api
       def assign_cinematics(opponent)
         cinematic_data = Array(params.dig(:opponent, :cinematics))
         opponent.cinematics.destroy_all if opponent.persisted?
-        cinematic_data.each_with_index do |c, i|
+        cinematic_data.each do |c|
           cinematic = opponent.cinematics.build(
-            level:       c[:level].to_i,
-            description: c[:description]
+            level:             c[:level].to_i,
+            description:       c[:description],
+            relationship_gain: c[:relationship_gain].presence&.to_i
           )
           if c[:background_url].present?
             cinematic.conversations.build(background_url: c[:background_url], position: 0)
@@ -107,6 +108,7 @@ module Api
       def serialize_cinematic(cinematic)
         h = { level: cinematic.level }
         h[:description] = cinematic.description if cinematic.description.present?
+        h[:relationshipGain] = cinematic.relationship_gain unless cinematic.relationship_gain.nil?
         if cinematic.association(:conversations).loaded?
           h[:conversations] = cinematic.conversations.map { |c| serialize_conversation(c) }
         end

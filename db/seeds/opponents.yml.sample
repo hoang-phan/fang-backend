@@ -36,6 +36,8 @@
     - /illyasviel/avatar5.jpg
   cinematics:
     - level: 1
+      description: Dance Battle
+      relationship_gain: 10
       conversations:
         - background_url: /illyasviel/cinematic1.webp
           chats:
@@ -47,6 +49,7 @@
             - role: hero
               content: I had a good reason to.
     - level: 2
+      relationship_gain: 20
       conversations:
         - background_url: /illyasviel/cinematic2.webp
           chats:
@@ -57,6 +60,7 @@
             - role: opponent
               content: Most people are. I find it... refreshing that you aren't.
     - level: 3
+      relationship_gain: 30
       conversations:
         - background_url: /illyasviel/cinematic3.webp
           chats:
@@ -67,6 +71,7 @@
             - role: opponent
               content: He grunted. That means he approves.
     - level: 4
+      relationship_gain: 40
       conversations:
         - background_url: /illyasviel/cinematic4.webp
           chats:
@@ -77,6 +82,7 @@
             - role: opponent
               content: Don't take it to mean anything.
     - level: 5
+      relationship_gain: 50
       conversations:
         - background_url: /illyasviel/cinematic5.webp
           chats:
@@ -164,12 +170,14 @@
     - /virtuosa/avatar5.jpg
   cinematics:
     - level: 1
+      relationship_gain: 10
       conversations:
         - background_url: /virtuosa/cinematic1.webp
           chats:
             - role: opponent
               content: You survived the forest. Good. Weak visitors bore me.
     - level: 2
+      relationship_gain: 20
       conversations:
         - background_url: /virtuosa/cinematic2.webp
           chats:
@@ -180,6 +188,7 @@
             - role: opponent
               content: They wept. They always weep. It's the only honest thing about them.
     - level: 3
+      relationship_gain: 30
       conversations:
         - background_url: /virtuosa/cinematic3.webp
           chats:
@@ -192,6 +201,7 @@
             - role: opponent
               content: Dangerous answer. I like it.
     - level: 4
+      relationship_gain: 40
       conversations:
         - background_url: /virtuosa/cinematic4.webp
           chats:
@@ -202,6 +212,7 @@
             - role: opponent
               content: Only if you're alone. Stay close.
     - level: 5
+      relationship_gain: 50
       conversations:
         - background_url: /virtuosa/cinematic5.webp
           chats:

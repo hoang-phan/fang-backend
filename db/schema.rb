@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_22_075249) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_22_124216) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -56,6 +56,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_22_075249) do
     t.text "description"
     t.integer "level", null: false
     t.string "opponent_slug", null: false
+    t.integer "relationship_gain"
     t.datetime "updated_at", null: false
     t.index ["opponent_slug", "level"], name: "index_cinematics_on_opponent_slug_and_level", unique: true
   end

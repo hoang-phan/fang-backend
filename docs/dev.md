@@ -106,12 +106,13 @@ Place image files under `public/images/opponents/<slug>/avatar_N.webp` etc. The 
 ### Cinematic
 Belongs to an Opponent via `opponent_slug`. Replaces the old `cinematic_1`–`cinematic_5` string columns.
 
-| column        | type    | notes                                      |
-|---------------|---------|--------------------------------------------|
-| id            | integer | auto PK                                    |
-| opponent_slug | string  | FK → opponents.slug                        |
-| level         | integer | 1-based, unique per opponent               |
-| description   | text    | nullable flavour text shown with cinematic |
+| column            | type    | notes                                              |
+|-------------------|---------|----------------------------------------------------|
+| id                | integer | auto PK                                            |
+| opponent_slug     | string  | FK → opponents.slug                                |
+| level             | integer | 1-based, unique per opponent                       |
+| description       | text    | nullable flavour text shown with cinematic         |
+| relationship_gain | integer | nullable; relationship XP awarded on cinematic view |
 
 Unique index on `(opponent_slug, level)`.
 
@@ -224,7 +225,7 @@ Controllers serialise to camelCase to match the frontend interfaces. The mapping
 | `xp_reward_victory/defeat` | `xpReward`        | serialised as `[victory, defeat]`              |
 | `unlock_after_list`        | `unlockAfter`     |                                                |
 | `avatar_1`–`avatar_5`      | `avatars`         | compact array of non-null values               |
-| `cinematic association`    | `cinematics`      | array of `{ level, description? }` objects — background URL is on the conversation |
+| `cinematic association`    | `cinematics`      | array of `{ level, description?, relationshipGain? }` objects — background URL is on the conversation |
 | `item.slug`                | `id`              | items resource                                 |
 | `item.base_damage`         | `baseDamage`      | omitted when null                              |
 | `item.base_defense`        | `baseDefense`     | omitted when null                              |

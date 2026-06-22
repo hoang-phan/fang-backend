@@ -66,7 +66,7 @@ opponents_data.each do |data|
 
   opponent.cinematics.destroy_all
   (data[:cinematics] || []).each do |c|
-    cinematic = opponent.cinematics.create!(level: c[:level], description: c[:description])
+    cinematic = opponent.cinematics.create!(c.except(:conversations))
     (c[:conversations] || []).each_with_index do |conv_data, pos|
       create_conversation(cinematic, conv_data.merge(position: pos))
     end

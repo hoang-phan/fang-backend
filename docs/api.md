@@ -57,6 +57,8 @@ Matches the frontend `OpponentDef` interface exactly.
     {
       "level": 1,
       "description": "Drake awakens.",
+      // optional — only present when non-null:
+      "relationshipGain": 25,    // relationship XP awarded when this cinematic is viewed
       // always present — array of conversations ordered by position:
       "conversations": [
         { "id": 2, "chats": [ /* Chat[] */ ], "backgroundUrl": "/images/opponents/drake/cinematic_1.webp", "backgroundColor": "#ccc", "position": 0 }
@@ -262,9 +264,10 @@ opponent[avatar_2]          string
 opponent[avatar_3]          string
 opponent[avatar_4]          string
 opponent[avatar_5]          string
-opponent[cinematics][][level]          integer  cinematic level (1-based)
-opponent[cinematics][][background_url] string   public-folder path for the background image (stored on the conversation)
-opponent[cinematics][][description]    string   optional flavour text
+opponent[cinematics][][level]             integer  cinematic level (1-based)
+opponent[cinematics][][background_url]  string   public-folder path for the background image (stored on the conversation)
+opponent[cinematics][][description]     string   optional flavour text
+opponent[cinematics][][relationship_gain] integer optional relationship XP awarded when this cinematic is viewed
 ```
 
 Passing `opponent[cinematics][]` **replaces all** cinematic records for the opponent.
