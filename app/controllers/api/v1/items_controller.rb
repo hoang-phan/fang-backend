@@ -14,7 +14,6 @@ module Api
 
       def create
         @item = Item.new(item_params)
-        @item.enhancements_list = params.dig(:item, :enhancements) || []
 
         if @item.save
           render json: serialize_item(@item), status: :created
@@ -25,7 +24,6 @@ module Api
 
       def update
         @item.assign_attributes(item_params)
-        @item.enhancements_list = params.dig(:item, :enhancements) if params.dig(:item, :enhancements)
 
         if @item.save
           render json: serialize_item(@item)
@@ -52,12 +50,11 @@ module Api
 
       def serialize_item(item)
         h = {
-          id:           item.slug,
-          name:         item.name,
-          icon:         item.icon,
-          category:     item.category,
-          quality:      item.quality,
-          enhancements: item.enhancements_list
+          id:       item.slug,
+          name:     item.name,
+          icon:     item.icon,
+          category: item.category,
+          quality:  item.quality
         }
         h[:baseDamage]  = item.base_damage  unless item.base_damage.nil?
         h[:baseDefense] = item.base_defense unless item.base_defense.nil?

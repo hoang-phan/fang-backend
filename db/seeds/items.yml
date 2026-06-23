@@ -4,9 +4,7 @@
 # quality:  one of rude normal rare legendary
 # base_damage:  optional, weapon only (>= 0)
 # base_defense: optional, armour/shield/etc (>= 0)
-# enhancements: array of { type, value, element? } objects (empty array if none)
-#   Enhancement types: damageBoost defenseBoost hpBoost mpBoost hpRegen mpRegen
-#                      elementDamage elementResist goldLootBoost dropChanceBoost
+# Enhancements are generated dynamically by the frontend based on quality and the affixes system.
 
 # Weapons
 - id: crackedBlade
@@ -15,7 +13,6 @@
   category: weapon
   quality: rude
   base_damage: 3
-  enhancements: []
 
 - id: ironSword
   name: Iron Sword
@@ -23,9 +20,6 @@
   category: weapon
   quality: normal
   base_damage: 8
-  enhancements:
-    - type: damageBoost
-      value: 2
 
 - id: engravdFalchion
   name: Engraved Falchion
@@ -33,12 +27,6 @@
   category: weapon
   quality: rare
   base_damage: 14
-  enhancements:
-    - type: damageBoost
-      value: 5
-    - type: elementDamage
-      value: 4
-      element: fire
 
 - id: doomfang
   name: Doomfang
@@ -46,14 +34,6 @@
   category: weapon
   quality: legendary
   base_damage: 24
-  enhancements:
-    - type: damageBoost
-      value: 12
-    - type: elementDamage
-      value: 10
-      element: dark
-    - type: hpRegen
-      value: 5
 
 # Headgear
 - id: clothHood
@@ -62,7 +42,6 @@
   category: headgear
   quality: rude
   base_defense: 1
-  enhancements: []
 
 - id: ironHelm
   name: Iron Helm
@@ -70,9 +49,6 @@
   category: headgear
   quality: normal
   base_defense: 4
-  enhancements:
-    - type: hpBoost
-      value: 8
 
 - id: runicCirclet
   name: Runic Circlet
@@ -80,11 +56,6 @@
   category: headgear
   quality: rare
   base_defense: 7
-  enhancements:
-    - type: hpBoost
-      value: 18
-    - type: mpBoost
-      value: 6
 
 - id: crownOfAges
   name: Crown of Ages
@@ -92,13 +63,6 @@
   category: headgear
   quality: legendary
   base_defense: 12
-  enhancements:
-    - type: hpBoost
-      value: 40
-    - type: mpBoost
-      value: 15
-    - type: hpRegen
-      value: 6
 
 # Body Armor
 - id: tornTunic
@@ -107,7 +71,6 @@
   category: bodyArmor
   quality: rude
   base_defense: 2
-  enhancements: []
 
 - id: chainmail
   name: Chainmail
@@ -115,9 +78,6 @@
   category: bodyArmor
   quality: normal
   base_defense: 5
-  enhancements:
-    - type: defenseBoost
-      value: 2
 
 - id: plateCuirass
   name: Plate Cuirass
@@ -125,11 +85,6 @@
   category: bodyArmor
   quality: rare
   base_defense: 9
-  enhancements:
-    - type: defenseBoost
-      value: 5
-    - type: hpBoost
-      value: 15
 
 - id: dragonscaleArmor
   name: Dragonscale Armor
@@ -137,14 +92,6 @@
   category: bodyArmor
   quality: legendary
   base_defense: 15
-  enhancements:
-    - type: defenseBoost
-      value: 10
-    - type: elementResist
-      value: 15
-      element: fire
-    - type: hpRegen
-      value: 8
 
 # Shield
 - id: buckler
@@ -153,7 +100,6 @@
   category: shield
   quality: rude
   base_defense: 1
-  enhancements: []
 
 - id: kiteShield
   name: Kite Shield
@@ -161,9 +107,6 @@
   category: shield
   quality: normal
   base_defense: 4
-  enhancements:
-    - type: defenseBoost
-      value: 2
 
 - id: towerShield
   name: Tower Shield
@@ -171,11 +114,6 @@
   category: shield
   quality: rare
   base_defense: 8
-  enhancements:
-    - type: defenseBoost
-      value: 5
-    - type: hpBoost
-      value: 12
 
 - id: aegisAncients
   name: Aegis of the Ancients
@@ -183,13 +121,6 @@
   category: shield
   quality: legendary
   base_defense: 14
-  enhancements:
-    - type: defenseBoost
-      value: 10
-    - type: hpBoost
-      value: 30
-    - type: mpRegen
-      value: 4
 
 # Gauntlets
 - id: clothWraps
@@ -198,7 +129,6 @@
   category: gauntlets
   quality: rude
   base_defense: 1
-  enhancements: []
 
 - id: ironGauntlets
   name: Iron Gauntlets
@@ -206,9 +136,6 @@
   category: gauntlets
   quality: normal
   base_defense: 3
-  enhancements:
-    - type: defenseBoost
-      value: 1
 
 - id: runicGrips
   name: Runic Grips
@@ -216,11 +143,6 @@
   category: gauntlets
   quality: rare
   base_defense: 6
-  enhancements:
-    - type: defenseBoost
-      value: 3
-    - type: damageBoost
-      value: 3
 
 - id: godfist
   name: Godfist
@@ -228,13 +150,6 @@
   category: gauntlets
   quality: legendary
   base_defense: 10
-  enhancements:
-    - type: defenseBoost
-      value: 8
-    - type: damageBoost
-      value: 8
-    - type: hpRegen
-      value: 4
 
 # Boots
 - id: wornSandals
@@ -243,7 +158,6 @@
   category: boots
   quality: rude
   base_defense: 1
-  enhancements: []
 
 - id: ironGreaves
   name: Iron Greaves
@@ -251,9 +165,6 @@
   category: boots
   quality: normal
   base_defense: 3
-  enhancements:
-    - type: hpBoost
-      value: 6
 
 - id: runicTreads
   name: Runic Treads
@@ -261,11 +172,6 @@
   category: boots
   quality: rare
   base_defense: 6
-  enhancements:
-    - type: hpBoost
-      value: 14
-    - type: mpRegen
-      value: 2
 
 - id: windwalkers
   name: Windwalkers
@@ -273,13 +179,6 @@
   category: boots
   quality: legendary
   base_defense: 10
-  enhancements:
-    - type: hpBoost
-      value: 28
-    - type: mpRegen
-      value: 6
-    - type: hpRegen
-      value: 5
 
 # Amulet
 - id: boneBead
@@ -287,42 +186,24 @@
   icon: 📿
   category: amulet
   quality: rude
-  enhancements: []
 
 - id: silverPendant
   name: Silver Pendant
   icon: 📿
   category: amulet
   quality: normal
-  enhancements:
-    - type: mpBoost
-      value: 5
 
 - id: runicAmulet
   name: Runic Amulet
   icon: 📿
   category: amulet
   quality: rare
-  enhancements:
-    - type: mpBoost
-      value: 12
-    - type: elementDamage
-      value: 5
-      element: psychic
 
 - id: eyeOfVoid
   name: Eye of the Void
   icon: 📿
   category: amulet
   quality: legendary
-  enhancements:
-    - type: mpBoost
-      value: 25
-    - type: elementDamage
-      value: 12
-      element: dark
-    - type: mpRegen
-      value: 6
 
 # Ring
 - id: copperBand
@@ -330,40 +211,24 @@
   icon: 💍
   category: ring
   quality: rude
-  enhancements: []
 
 - id: silverRing
   name: Silver Ring
   icon: 💍
   category: ring
   quality: normal
-  enhancements:
-    - type: hpBoost
-      value: 7
 
 - id: goldRing
   name: Gold Ring
   icon: 💍
   category: ring
   quality: rare
-  enhancements:
-    - type: hpBoost
-      value: 16
-    - type: goldLootBoost
-      value: 18
 
 - id: ringOfAncients
   name: Ring of the Ancients
   icon: 💍
   category: ring
   quality: legendary
-  enhancements:
-    - type: hpBoost
-      value: 35
-    - type: goldLootBoost
-      value: 40
-    - type: dropChanceBoost
-      value: 20
 
 # Charm
 - id: pebble
@@ -371,38 +236,21 @@
   icon: 🔮
   category: charm
   quality: rude
-  enhancements: []
 
 - id: minorCharm
   name: Minor Charm
   icon: 🔮
   category: charm
   quality: normal
-  enhancements:
-    - type: goldLootBoost
-      value: 8
 
 - id: grandCharm
   name: Grand Charm
   icon: 🔮
   category: charm
   quality: rare
-  enhancements:
-    - type: goldLootBoost
-      value: 20
-    - type: dropChanceBoost
-      value: 10
 
 - id: hellfireCharm
   name: Hellfire Charm
   icon: 🔮
   category: charm
   quality: legendary
-  enhancements:
-    - type: goldLootBoost
-      value: 45
-    - type: dropChanceBoost
-      value: 25
-    - type: elementDamage
-      value: 10
-      element: fire

@@ -89,11 +89,9 @@ Matches the frontend `OpponentDef` interface exactly.
   "icon": "🗡️",
   "category": "weapon",          // one of ItemCategory
   "quality": "normal",           // "rude" | "normal" | "rare" | "legendary"
-  "baseDamage": 12,              // optional — weapon only
-  "baseDefense": null,           // optional — omitted when null
-  "enhancements": [              // array of Enhancement objects
-    { "type": "damageBoost", "value": 5 }
-  ]
+  "baseDamage": 12,              // optional — weapon only; omitted when null
+  "baseDefense": null            // optional — omitted when null
+  // enhancements are generated dynamically by the frontend from quality + affixes system
 }
 ```
 
@@ -354,9 +352,7 @@ Returns all items ordered by name.
     "quality": "normal",        // "rude" | "normal" | "rare" | "legendary"
     "base_damage": 12,          // optional, >= 0
     "base_defense": null,       // optional, >= 0
-    "enhancements": [           // optional array of Enhancement objects
-      { "type": "damageBoost", "value": 5 }
-    ]
+    // enhancements are not stored — generated dynamically by the frontend
   }
 }
 ```

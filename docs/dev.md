@@ -130,12 +130,10 @@ Primary key is `slug`. Mirrors the frontend `EquipmentItem` interface.
 | quality      | string  | one of `Item::QUALITIES`                           |
 | base_damage  | integer | nullable; weapon only                              |
 | base_defense | integer | nullable; armour/shield/etc.                       |
-| enhancements | text    | JSON array of `{ type, value, element? }` objects  |
-
 Valid `category` values: `headgear bodyArmor weapon shield amulet ring charm gauntlets boots`  
 Valid `quality` values: `rude normal rare legendary`
 
-Use `item.enhancements_list` / `item.enhancements_list=` to read/write the JSON array.
+Enhancements are not stored on the backend — the frontend generates them dynamically based on quality and the affixes system.
 
 ### Gift
 Belongs to an Opponent via `opponent_slug`. Auto integer PK.
@@ -229,7 +227,6 @@ Controllers serialise to camelCase to match the frontend interfaces. The mapping
 | `item.slug`                | `id`              | items resource                                 |
 | `item.base_damage`         | `baseDamage`      | omitted when null                              |
 | `item.base_defense`        | `baseDefense`     | omitted when null                              |
-| `item.enhancements_list`   | `enhancements`    | JSON array                                     |
 | `gift.slug`                | `id`              | gifts resource                                 |
 | `conversation.id`          | `id`              | conversations resource                         |
 | `conversation.background_url` | `backgroundUrl` | omitted when null                             |

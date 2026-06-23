@@ -96,9 +96,6 @@ items_data = YAML.load_file(SEEDS_DIR.join("items.yml"), symbolize_names: true)
 items_data.each do |data|
   Item.find_or_initialize_by(slug: data[:id]).tap do |item|
     item.assign_attributes(data.slice(:name, :icon, :category, :quality, :base_damage, :base_defense))
-    item.enhancements_list = (data[:enhancements] || []).map do |e|
-      e.transform_keys(&:to_s)
-    end
     item.save!
     print "."
   end
