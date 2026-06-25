@@ -35,3 +35,4 @@
 public/*
 !/public/robots.txt
 db/seeds/opponents.yml
+db/seeds/*.txt
