@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_22_155010) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_26_011220) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -99,6 +99,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_22_155010) do
     t.datetime "created_at", null: false
     t.float "damage_variance", default: 0.2, null: false
     t.text "description"
+    t.integer "effect_boost_kind", default: 0
+    t.integer "effect_boost_percent"
     t.integer "effect_damage"
     t.float "effect_prob"
     t.boolean "effect_stun"

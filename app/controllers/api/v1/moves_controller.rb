@@ -43,7 +43,8 @@ module Api
       def move_params
         params.expect(move: [ :slug, :name, :icon, :description, :element_type,
                                :mp_cost, :base_damage, :damage_variance, :level, :max_level,
-                               :effect_turns, :effect_damage, :effect_prob, :leech ])
+                               :effect_turns, :effect_damage, :effect_prob, :leech,
+                               :effect_boost_percent, :effect_boost_kind ])
       end
 
       def serialize_move(move)
@@ -63,6 +64,8 @@ module Api
         hash[:effectDamage] = move.effect_damage unless move.effect_damage.nil?
         hash[:effectProb]   = move.effect_prob   unless move.effect_prob.nil?
         hash[:leech]        = move.leech         unless move.leech.nil?
+        hash[:effectBoostPercent] = move.effect_boost_percent unless move.effect_boost_percent.nil?
+        hash[:effectBoostKind] = move.effect_boost_kind unless move.effect_boost_kind.nil?
         hash
       end
     end

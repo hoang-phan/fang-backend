@@ -66,10 +66,12 @@ Primary key is `slug` (string, e.g. `"fireball"`). All other fields mirror the f
 | damage_variance  | float   | 0.0–1.0                                       |
 | level            | integer | starts at 1                                   |
 | max_level        | integer | usually 5                                     |
-| effect_turns     | integer | nullable; turns the status effect lasts (> 0) |
-| effect_damage    | integer | nullable; damage dealt per effect turn (>= 0) |
-| effect_prob      | float   | nullable; % chance effect triggers (1–100)    |
-| leech            | float   | nullable; % of damage leeched as HP (1–100)   |
+| effect_turns         | integer | nullable; turns the status effect lasts (> 0)                    |
+| effect_damage        | integer | nullable; damage dealt per effect turn (>= 0)                    |
+| effect_prob          | float   | nullable; % chance effect triggers (1–100)                       |
+| leech                | float   | nullable; % of damage leeched as HP (1–100)                      |
+| effect_boost_percent | integer | nullable; % boost applied each effect turn                       |
+| effect_boost_kind    | integer | enum (default 0); none attack_all attack_element defense evasion hp mp |
 
 Valid `element_type` values: `normal fire water electric grass ice poison earth dark psychic`
 
@@ -218,6 +220,8 @@ Controllers serialise to camelCase to match the frontend interfaces. The mapping
 | `effect_damage`            | `effectDamage`    | omitted from response when null                |
 | `effect_prob`              | `effectProb`      | omitted from response when null                |
 | `leech`                    | `leech`           | omitted from response when null                |
+| `effect_boost_percent`     | `effectBoostPercent` | omitted from response when null             |
+| `effect_boost_kind`        | `effectBoostKind` | omitted from response when null (enum string)  |
 | `gold_reward_min/max`      | `goldReward`      | serialised as `[min, max]`                     |
 | `flavour_text`             | `flavourText`     |                                                |
 | `xp_reward_victory/defeat` | `xpReward`        | serialised as `[victory, defeat]`              |

@@ -31,7 +31,9 @@ Matches the frontend `Move` interface exactly.
   "effectTurns": 2,          // how many turns the status effect lasts
   "effectDamage": 5,         // damage dealt per effect turn
   "effectProb": 30,          // % chance the effect triggers (1–100)
-  "leech": 30                // % of damage converted to HP and returned to the caster (1–100)
+  "leech": 30,               // % of damage converted to HP and returned to the caster (1–100)
+  "effectBoostPercent": 10,  // % boost applied each effect turn (e.g. 10 = +10%)
+  "effectBoostKind": "attack_all"  // what is boosted: "none" | "attack_all" | "attack_element" | "defense" | "evasion" | "hp" | "mp"
 }
 ```
 
@@ -195,7 +197,9 @@ Returns all moves ordered by name.
     "effect_turns": 2,        // optional; > 0 integer — turns the status effect lasts
     "effect_damage": 5,       // optional; >= 0 integer — damage per effect turn
     "effect_prob": 30,        // optional; 1–100 float — % chance effect triggers
-    "leech": 30               // optional; 1–100 float — % of damage leeched as HP
+    "leech": 30,              // optional; 1–100 float — % of damage leeched as HP
+    "effect_boost_percent": 10,   // optional; integer — % boost applied per effect turn
+    "effect_boost_kind": "attack_all"  // optional; one of: none attack_all attack_element defense evasion hp mp
   }
 }
 ```

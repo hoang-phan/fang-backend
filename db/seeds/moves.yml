@@ -9,7 +9,7 @@
   description: Crashes full force into the foe.
   element_type: normal
   mp_cost: 15
-  base_damage: 28
+  base_damage: 14
   damage_variance: 0.20
   level: 1
   max_level: 5
@@ -19,7 +19,7 @@
   description: A straightforward physical charge.
   element_type: normal
   mp_cost: 10
-  base_damage: 20
+  base_damage: 10
   damage_variance: 0.25
   level: 1
   max_level: 5
@@ -29,7 +29,7 @@
   description: A precise cutting strike.
   element_type: normal
   mp_cost: 18
-  base_damage: 32
+  base_damage: 16
   damage_variance: 0.15
   level: 1
   max_level: 5
@@ -39,8 +39,22 @@
   description: Smash your skull into the foe.
   element_type: normal
   mp_cost: 12
-  base_damage: 24
+  base_damage: 12
   damage_variance: 0.20
+  level: 1
+  max_level: 5
+
+- slug: battleOrder
+  name: Battle Order
+  description: Orders the foe to attack itself.
+  element_type: normal
+  mp_cost: 10
+  base_damage: 0
+  damage_variance: 0
+  effect_turns: 3
+  effect_prob: 100
+  effect_boost_percent: 10
+  effect_boost_kind: attack_all
   level: 1
   max_level: 5
 
@@ -49,20 +63,10 @@
   description: Restores some HP with a gentle breeze.
   element_type: normal
   mp_cost: 30
-  base_damage: -25
+  base_damage: -15
   damage_variance: 0.05
   level: 1
   max_level: 5
-
-- slug: attack
-  name: Attack
-  description: A reliable physical strike.
-  element_type: normal
-  mp_cost: 0
-  base_damage: 12
-  damage_variance: 0.25
-  level: 1
-  max_level: 1
 
 # Poison
 - slug: venomStrike
@@ -70,7 +74,7 @@
   description: A swift poisonous lunge.
   element_type: poison
   mp_cost: 18
-  base_damage: 22
+  base_damage: 11
   damage_variance: 0.25
   level: 1
   max_level: 5
@@ -80,7 +84,7 @@
   description: Launches a glob of corrosive acid.
   element_type: poison
   mp_cost: 15
-  base_damage: 26
+  base_damage: 13
   damage_variance: 0.20
   level: 1
   max_level: 5
@@ -90,7 +94,7 @@
   description: Engulfs the foe in a noxious mist.
   element_type: poison
   mp_cost: 25
-  base_damage: 38
+  base_damage: 19
   damage_variance: 0.15
   level: 1
   max_level: 5
@@ -100,7 +104,7 @@
   description: Sinks venomous fangs into the target.
   element_type: poison
   mp_cost: 22
-  base_damage: 34
+  base_damage: 17
   damage_variance: 0.18
   level: 1
   max_level: 5
@@ -111,7 +115,7 @@
   description: Hurls a blazing sphere.
   element_type: fire
   mp_cost: 20
-  base_damage: 35
+  base_damage: 16
   damage_variance: 0.15
   level: 1
   max_level: 5
@@ -121,7 +125,7 @@
   description: A burst of scorching embers.
   element_type: fire
   mp_cost: 15
-  base_damage: 26
+  base_damage: 13
   damage_variance: 0.20
   level: 1
   max_level: 5
@@ -131,7 +135,7 @@
   description: A sweeping wave of fire.
   element_type: fire
   mp_cost: 28
-  base_damage: 44
+  base_damage: 22
   damage_variance: 0.12
   level: 1
   max_level: 5
@@ -141,8 +145,22 @@
   description: Exhales a cone of blistering flame.
   element_type: fire
   mp_cost: 35
-  base_damage: 55
+  base_damage: 27
   damage_variance: 0.10
+  level: 1
+  max_level: 5
+
+- slug: fireUp
+  name: Fire Up
+  description: Boosts the user's fire attack.
+  element_type: fire
+  mp_cost: 10
+  base_damage: 0
+  damage_variance: 0
+  effect_turns: 3
+  effect_prob: 100
+  effect_boost_percent: 10
+  effect_boost_kind: attack_element
   level: 1
   max_level: 5
 
@@ -152,7 +170,7 @@
   description: A crackling bolt of lightning.
   element_type: electric
   mp_cost: 25
-  base_damage: 45
+  base_damage: 22
   damage_variance: 0.10
   level: 1
   max_level: 5
@@ -162,7 +180,7 @@
   description: Zaps the foe with built-up static.
   element_type: electric
   mp_cost: 15
-  base_damage: 24
+  base_damage: 12
   damage_variance: 0.25
   level: 1
   max_level: 5
@@ -172,7 +190,7 @@
   description: Charges forward with electric force.
   element_type: electric
   mp_cost: 22
-  base_damage: 38
+  base_damage: 19
   damage_variance: 0.15
   level: 1
   max_level: 5
@@ -182,7 +200,7 @@
   description: A deafening electric shockwave.
   element_type: electric
   mp_cost: 32
-  base_damage: 52
+  base_damage: 26
   damage_variance: 0.10
   level: 1
   max_level: 5
@@ -193,7 +211,7 @@
   description: Slashes with a claw of pure darkness.
   element_type: dark
   mp_cost: 28
-  base_damage: 42
+  base_damage: 21
   damage_variance: 0.18
   level: 1
   max_level: 5
@@ -203,7 +221,7 @@
   description: Warps reality with deep shadow.
   element_type: dark
   mp_cost: 20
-  base_damage: 33
+  base_damage: 16
   damage_variance: 0.20
   level: 1
   max_level: 5
@@ -213,7 +231,7 @@
   description: Fires a pulse of annihilating energy.
   element_type: dark
   mp_cost: 30
-  base_damage: 48
+  base_damage: 24
   damage_variance: 0.15
   level: 1
   max_level: 5
@@ -223,9 +241,23 @@
   description: Drains the life force of the foe.
   element_type: dark
   mp_cost: 25
-  base_damage: 40
+  base_damage: 20
   damage_variance: 0.10
   leech: 30
+  level: 1
+  max_level: 5
+
+- slug: ultraInstinct
+  name: Ultra Instinct
+  description: User can evade attacks.
+  element_type: dark
+  mp_cost: 10
+  base_damage: 0
+  damage_variance: 0
+  effect_turns: 3
+  effect_prob: 100
+  effect_boost_percent: 10
+  effect_boost_kind: evasion
   level: 1
   max_level: 5
 
@@ -235,7 +267,7 @@
   description: Shakes the ground with tremendous force.
   element_type: earth
   mp_cost: 35
-  base_damage: 55
+  base_damage: 27
   damage_variance: 0.10
   effect_turns: 2
   effect_prob: 30
@@ -259,7 +291,7 @@
   description: Buries the foe under cascading mud.
   element_type: earth
   mp_cost: 22
-  base_damage: 38
+  base_damage: 19
   damage_variance: 0.18
   effect_turns: 2
   effect_prob: 25
@@ -271,10 +303,24 @@
   description: Pulverizes with grinding stone force.
   element_type: earth
   mp_cost: 28
-  base_damage: 46
+  base_damage: 23
   damage_variance: 0.12
   effect_turns: 1
   effect_prob: 20
+  level: 1
+  max_level: 5
+
+- slug: stoneSkin
+  name: Stone Skin
+  description: Creates a skin of stone.
+  element_type: earth
+  mp_cost: 18
+  base_damage: 0
+  damage_variance: 0.20
+  effect_turns: 5
+  effect_prob: 100
+  effect_boost_percent: 10
+  effect_boost_kind: defense
   level: 1
   max_level: 5
 
@@ -284,7 +330,7 @@
   description: A razor-sharp shard of ice.
   element_type: ice
   mp_cost: 22
-  base_damage: 38
+  base_damage: 19
   damage_variance: 0.12
   level: 1
   max_level: 5
@@ -295,7 +341,7 @@
   description: Unleashes a devastating psychic wave.
   element_type: psychic
   mp_cost: 28
-  base_damage: 44
+  base_damage: 22
   damage_variance: 0.12
   level: 1
   max_level: 5
@@ -305,10 +351,11 @@
   description: Unleashes a devastating psychic wave.
   element_type: psychic
   mp_cost: 28
-  base_damage: 44
+  base_damage: 22
   damage_variance: 0.12
-  effect_turns: 2
-  effect_prob: 30
+  effect_stun: true
+  effect_turns: 1
+  effect_prob: 10
   level: 1
   max_level: 5
 
@@ -323,16 +370,15 @@
   effect_prob: 100
   level: 1
   max_level: 5
+  base_defense: 5
 
 - slug: psychicBlade
   name: Psychic Blade
   description: Slashes with a blade of psychic energy.
   element_type: psychic
   mp_cost: 22
-  base_damage: 38
+  base_damage: 19
   damage_variance: 0.18
-  effect_turns: 2
-  effect_prob: 25
   level: 1
   max_level: 5
 
@@ -340,10 +386,60 @@
   name: Insomnia
   description: Puts the foe to sleep.
   element_type: psychic
-  mp_cost: 28
-  base_damage: 46
-  damage_variance: 0.12
+  mp_cost: 12
+  base_damage: 0
+  damage_variance: 0
   effect_turns: 1
   effect_prob: 20
+  effect_stun: true
+  level: 1
+  max_level: 5
+
+- slug: psychicRealms
+  name: Psychic Realms
+  description: Creates a realm of psychic energy.
+  element_type: psychic
+  mp_cost: 28
+  base_damage: 0
+  damage_variance: 0
+  effect_turns: 3
+  effect_prob: 100
+  effect_boost_percent: 20
+  effect_boost_kind: attack_element
+  level: 1
+  max_level: 5
+
+# Water
+- slug: waterGun
+  name: Water Gun
+  description: Shoots a stream of water.
+  element_type: water
+  mp_cost: 22
+  base_damage: 19
+  damage_variance: 0.12
+  level: 1
+  max_level: 5
+
+- slug: waterPulse
+  name: Water Pulse
+  description: Creates a pulse of water.
+  element_type: water
+  mp_cost: 28
+  base_damage: 22
+  damage_variance: 0.12
+  level: 1
+  max_level: 5
+
+- slug: fountainOfEnergy
+  name: Fountain of Energy
+  description: Restore MP per turn.
+  element_type: water
+  mp_cost: 28
+  base_damage: 0
+  damage_variance: 0
+  effect_turns: 3
+  effect_prob: 100
+  effect_boost_percent: 10
+  effect_boost_kind: mp
   level: 1
   max_level: 5

@@ -167,7 +167,9 @@ module Api
           effectProb: move.effect_prob,
           leech: move.leech,
           baseDefense: move.base_defense,
-          effectStun: move.effect_stun
+          effectStun: move.effect_stun,
+          effectBoostPercent: move.effect_boost_percent,
+          effectBoostKind: move.effect_boost_kind
         }
       end
     end
