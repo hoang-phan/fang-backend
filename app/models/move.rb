@@ -21,8 +21,8 @@ class Move < ApplicationRecord
   validates :effect_prob, numericality: { greater_than: 0, less_than_or_equal_to: 100 }, allow_nil: true
   validates :leech, numericality: { greater_than: 0, less_than_or_equal_to: 100 }, allow_nil: true
 
-  enum effect_boost_kind: {
-    none: 0,
+  enum :effect_boost_kind, {
+    nothing: 0,
     attack_all: 1,
     attack_element: 2,
     defense: 3,

@@ -18,10 +18,8 @@ class Opponent < ApplicationRecord
   validates :max_hp, numericality: { greater_than: 0 }
   validates :base_damage, numericality: { greater_than: 0 }
   validates :damage_variance, numericality: { greater_than_or_equal_to: 0.0, less_than_or_equal_to: 1.0 }
-  validates :gold_reward_min, numericality: { greater_than_or_equal_to: 0 }
-  validates :gold_reward_max, numericality: { greater_than: 0 }
-  validates :xp_reward_victory, numericality: { greater_than_or_equal_to: 0 }
-  validates :xp_reward_defeat, numericality: { greater_than_or_equal_to: 0 }
+  validates :gold_reward, numericality: { greater_than_or_equal_to: 0 }
+  validates :xp_reward, numericality: { greater_than_or_equal_to: 0 }
 
   def unlock_after_list
     return [] if unlock_after.blank?
