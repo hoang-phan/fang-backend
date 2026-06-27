@@ -1,6 +1,15 @@
 require "yaml"
 
 SEEDS_DIR = Rails.root.join("db", "seeds")
+CONV_DIR  = SEEDS_DIR.join("conversations")
+
+def resolve_conversations(value)
+  case value
+  when String then YAML.load_file(CONV_DIR.join(value), symbolize_names: true)
+  when Array  then value
+  else             []
+  end
+end
 
 def create_chat(conversation, chat_params)
   chat = conversation.chats.create!(chat_params.except(:sprites))
@@ -39,7 +48,7 @@ opponents_data.each do |data|
   # Map API-shaped camelCase keys back to column names
   opponent = Opponent.find_or_initialize_by(slug: data[:id])
   opponent.assign_attributes(
-    data.slice(:name, :element_type, :max_hp, :base_damage, :damage_variance, :gold_reward, :xp_reward, :avatar)
+    data.slice(:name, :element_type, :max_hp, :base_damage, :base_defense, :damage_variance, :gold_reward, :xp_reward, :avatar, :flavour_text)
   )
   opponent.unlock_after_list = data[:unlock_after] || []
   opponent.save!
@@ -52,7 +61,7 @@ opponents_data.each do |data|
   opponent.cinematics.destroy_all
   (data[:cinematics] || []).each do |c|
     cinematic = opponent.cinematics.create!(c.except(:conversations))
-    (c[:conversations] || []).each_with_index do |conv_data, pos|
+    resolve_conversations(c[:conversations]).each_with_index do |conv_data, pos|
       create_conversation(cinematic, conv_data.merge(position: pos))
     end
   end
@@ -60,13 +69,13 @@ opponents_data.each do |data|
   opponent.gifts.destroy_all
   (data[:gifts] || []).each do |g|
     gift = opponent.gifts.create!(name: g[:name], gold: g[:gold], exp: g[:exp])
-    (g[:conversations] || []).each do |conv_data|
+    resolve_conversations(g[:conversations]).each do |conv_data|
       create_conversation(gift, conv_data)
     end
   end
 
   opponent.conversations.destroy_all
-  (data[:conversations] || []).each do |conv_data|
+  resolve_conversations(data[:conversations]).each do |conv_data|
     create_conversation(opponent, conv_data)
   end
 

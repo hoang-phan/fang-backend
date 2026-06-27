@@ -1,145 +1,51 @@
-# Opponents seed data.
-# Format mirrors the Opponent API response shape (camelCase keys) for easy reading,
-# with a few additions needed only for seeding:
-#   - moves: array of move slugs in battle-slot order (position 0-3)
-#   - avatar: public-folder path
-#   - cinematics[].conversations[].background_url: background image for that conversation
-#   - cinematics[].conversations[]: array of conversations (ordered by position) for this cinematic
-#   - gifts[].conversations[]: array of conversations (ordered by position) for this gift
-#   - conversations: array of opponent-level chat conversations (picked randomly in-game)
-#
-# gold_reward: reward
-# xp_reward: victoryXp
-# unlock_after: array of opponent slugs that must be defeated first
-
+---
 - id: illyasviel
   name: Illyasviel von Einzbern
   element_type: psychic
   max_hp: 50
   base_damage: 8
-  damage_variance: 0.20
+  damage_variance: 0.2
   gold_reward: 15
   xp_reward: 50
   flavour_text: Master of Berserker
   unlock_after: []
   moves:
-    - psychicWave
-    - psychicShield
-    - psychicBlade
-    - insomnia
-  avatar: /illyasviel/avatar5.jpg
+  - psychicWave
+  - psychicShield
+  - psychicBlade
+  - insomnia
+  avatar: "/illyasviel/avatar5.jpg"
   cinematics:
-    - level: 1
-      description: Dance Battle
-      relationship_gain: 10
-      conversations:
-        - background_url: /illyasviel/cinematic1.webp
-          chats:
-            - role: opponent
-              content: So you've come this far. Surprising.
-              sprites:
-                - url: /illyasviel/in-awe.png
-                  width: 200
-            - role: hero
-              content: I had a good reason to.
-    - level: 2
-      relationship_gain: 20
-      conversations:
-        - background_url: /illyasviel/cinematic2.webp
-          chats:
-            - role: opponent
-              content: You're not afraid of me, are you?
-            - role: hero
-              content: Should I be?
-            - role: opponent
-              content: Most people are. I find it... refreshing that you aren't.
-    - level: 3
-      relationship_gain: 30
-      conversations:
-        - background_url: /illyasviel/cinematic3.webp
-          chats:
-            - role: opponent
-              content: Berserker asked about you.
-            - role: hero
-              content: What did he say?
-            - role: opponent
-              content: He grunted. That means he approves.
-    - level: 4
-      relationship_gain: 40
-      conversations:
-        - background_url: /illyasviel/cinematic4.webp
-          chats:
-            - role: hero
-              content: You looked worried today, in the fight.
-            - role: opponent
-              content: I was making sure you didn't do anything reckless.
-            - role: opponent
-              content: Don't take it to mean anything.
-    - level: 5
-      relationship_gain: 50
-      conversations:
-        - background_url: /illyasviel/cinematic5.webp
-          chats:
-            - role: opponent
-              content: You know, for a human, you're not completely hopeless.
-            - role: hero
-              content: High praise, coming from you.
-            - role: opponent
-              content: Don't push it.
+  - level: 1
+    description: Dance Battle
+    relationship_gain: 10
+    conversations: illyasviel-cinematic-1.yml
+  - level: 2
+    relationship_gain: 20
+    conversations: illyasviel-cinematic-2.yml
+  - level: 3
+    relationship_gain: 30
+    conversations: illyasviel-cinematic-3.yml
+  - level: 4
+    relationship_gain: 40
+    conversations: illyasviel-cinematic-4.yml
+  - level: 5
+    relationship_gain: 50
+    conversations: illyasviel-cinematic-5.yml
   gifts:
-    - name: Tulip Bouquet
-      gold: 20
-      exp: 20
-      conversations:
-        - chats:
-            - role: hero
-              content: I brought you something. Tulips.
-            - role: opponent
-              content: "...White ones? Those are my favourite."
-            - role: hero
-              content: I know.
-            - role: opponent
-              content: Don't smile like that. It's embarrassing.
-    - name: Chocolate Box
-      gold: 30
-      exp: 40
-      conversations:
-        - chats:
-            - role: hero
-              content: Belgian chocolate. Dark.
-            - role: opponent
-              content: You remembered I don't like milk chocolate.
-            - role: opponent
-              content: I'll share — but only because I feel generous today.
-    - name: Magic Mugs
-      gold: 50
-      exp: 80
-      conversations:
-        - chats:
-            - role: opponent
-              content: These change colour when they're hot?
-            - role: hero
-              content: They show constellations. I thought you'd like the stars.
-            - role: opponent
-              content: "...I do. Don't make a big deal of it."
-  conversations:
-    - chats:
-        - role: opponent
-          content: You're here again. I suppose I'll allow it.
-        - role: hero
-          content: Always. You're hard to stay away from.
-        - role: opponent
-          content: Hmph. Don't read into it.
-    - chats:
-        - role: hero
-          content: How do you stay so calm before a battle?
-        - role: opponent
-          content: When you've fought a Berserker, everything else feels slow.
-        - role: opponent
-          content: Besides — you're not nearly as scary as Berserker.
-        - role: hero
-          content: I'll try not to take that personally.
-
+  - name: Tulip Bouquet
+    gold: 20
+    exp: 20
+    conversations: illyasviel-gift-tulip-bouquet.yml
+  - name: Chocolate Box
+    gold: 30
+    exp: 40
+    conversations: illyasviel-gift-chocolate-box.yml
+  - name: Magic Mugs
+    gold: 50
+    exp: 80
+    conversations: illyasviel-gift-magic-mugs.yml
+  conversations: illyasviel-conversations.yml
 - id: virtuosa
   name: Virtuosa
   element_type: dark
@@ -151,118 +57,38 @@
   flavour_text: Agent of the Black Forest
   unlock_after: []
   moves:
-    - shadowClaw
-    - nightShade
-    - voidPulse
-    - soulDrain
-  avatar: /virtuosa/avatar5.jpg
+  - shadowClaw
+  - nightShade
+  - voidPulse
+  - soulDrain
+  avatar: "/virtuosa/avatar5.jpg"
   cinematics:
-    - level: 1
-      relationship_gain: 10
-      conversations:
-        - background_url: /virtuosa/cinematic1.webp
-          chats:
-            - role: opponent
-              content: You survived the forest. Good. Weak visitors bore me.
-    - level: 2
-      relationship_gain: 20
-      conversations:
-        - background_url: /virtuosa/cinematic2.webp
-          chats:
-            - role: opponent
-              content: I played for the Black Forest council last night.
-            - role: hero
-              content: And?
-            - role: opponent
-              content: They wept. They always weep. It's the only honest thing about them.
-    - level: 3
-      relationship_gain: 30
-      conversations:
-        - background_url: /virtuosa/cinematic3.webp
-          chats:
-            - role: hero
-              content: Teach me something.
-            - role: opponent
-              content: Music or combat?
-            - role: hero
-              content: Surprise me.
-            - role: opponent
-              content: Dangerous answer. I like it.
-    - level: 4
-      relationship_gain: 40
-      conversations:
-        - background_url: /virtuosa/cinematic4.webp
-          chats:
-            - role: opponent
-              content: The forest is restless tonight. I can hear it.
-            - role: hero
-              content: Should I be worried?
-            - role: opponent
-              content: Only if you're alone. Stay close.
-    - level: 5
-      relationship_gain: 50
-      conversations:
-        - background_url: /virtuosa/cinematic5.webp
-          chats:
-            - role: opponent
-              content: You've become something of a fixture here.
-            - role: hero
-              content: Is that a problem?
-            - role: opponent
-              content: No. The forest has accepted you. And so have I.
+  - level: 1
+    relationship_gain: 10
+    conversations: virtuosa-cinematic-1.yml
+  - level: 2
+    relationship_gain: 20
+    conversations: virtuosa-cinematic-2.yml
+  - level: 3
+    relationship_gain: 30
+    conversations: virtuosa-cinematic-3.yml
+  - level: 4
+    relationship_gain: 40
+    conversations: virtuosa-cinematic-4.yml
+  - level: 5
+    relationship_gain: 50
+    conversations: virtuosa-cinematic-5.yml
   gifts:
-    - name: Rose
-      gold: 15
-      exp: 30
-      conversations:
-        - chats:
-            - role: hero
-              content: A single black rose. Felt appropriate.
-            - role: opponent
-              content: You have taste. Most bring red — so predictable.
-            - role: opponent
-              content: I'll press it. A rare honour.
-    - name: Biscuit Box
-      gold: 25
-      exp: 50
-      conversations:
-        - chats:
-            - role: hero
-              content: Assorted biscuits. From the city bakery.
-            - role: opponent
-              content: The lemon creams?
-            - role: hero
-              content: Bottom left corner.
-            - role: opponent
-              content: You planned this. I respect that.
-    - name: Coffee Mug
-      gold: 35
-      exp: 70
-      conversations:
-        - chats:
-            - role: opponent
-              content: A mug with sheet music printed on it.
-            - role: hero
-              content: Moonlight Sonata. Seemed like you.
-            - role: opponent
-              content: It is me. Unsettlingly so.
-  conversations:
-    - chats:
-        - role: opponent
-          content: You seek an audience with me? Bold.
-        - role: hero
-          content: Or just curious.
-        - role: opponent
-          content: "Curiosity gets people killed in the Black Forest. Lucky for you, I'm in a generous mood."
-    - chats:
-        - role: hero
-          content: Do you ever regret working for them?
-        - role: opponent
-          content: Regret is a luxury for those without purpose.
-        - role: opponent
-          content: I have my music. That's enough.
-        - role: hero
-          content: Is it?
-        - role: opponent
-          position: 4
-          content: "...Ask me again sometime."
+  - name: Rose
+    gold: 15
+    exp: 30
+    conversations: virtuosa-gift-rose.yml
+  - name: Biscuit Box
+    gold: 25
+    exp: 50
+    conversations: virtuosa-gift-biscuit-box.yml
+  - name: Coffee Mug
+    gold: 35
+    exp: 70
+    conversations: virtuosa-gift-coffee-mug.yml
+  conversations: virtuosa-conversations.yml

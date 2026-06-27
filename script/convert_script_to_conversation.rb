@@ -1,26 +1,44 @@
 #!/usr/bin/env ruby
-# Usage: ruby script/convert_script_to_conversation.rb <story_file.txt> [--id <opponent_id> --level <cinematic_level>]
+# Usage: ruby script/convert_script_to_conversation.rb <story_file.txt> [OPTIONS]
 #
-# Without --id/--level: prints the chat blocks to stdout.
-# With    --id/--level: appends a new conversation to that cinematic in opponents.yml.
+# Without targeting options: prints the chat blocks to stdout.
+#
+# Cinematic:  --id <opponent_id> --level <n>
+# Gift:       --id <opponent_id> --gift <gift-name-slug>
+# Chat:       --id <opponent_id> --chat
+#
+# In all three cases, the conversation is appended to the matching
+# db/seeds/conversations/<file>.yml (creating it if it doesn't exist yet).
 
 require "optparse"
+require "yaml"
 
-OPPONENTS_YML = File.expand_path("../db/seeds/opponents.yml", __dir__)
+SEEDS_DIR    = File.expand_path("../db/seeds", __dir__)
+CONV_DIR     = File.join(SEEDS_DIR, "conversations")
+OPPONENTS_YML = File.join(SEEDS_DIR, "opponents.yml")
 
 options = {}
 parser = OptionParser.new do |opts|
-  opts.on("--id ID", "Opponent id (e.g. illyasviel)")
-  opts.on("--level N", Integer, "Cinematic level number")
+  opts.on("--id ID",      "Opponent id (e.g. illyasviel)")
+  opts.on("--level N",    Integer, "Cinematic level number")
+  opts.on("--gift SLUG",  "Gift name slug (e.g. tulip-bouquet)")
+  opts.on("--chat",       "Append to opponent-level random conversations")
 end
 parser.parse!(into: options)
 
 story_file = ARGV[0]
-abort "Usage: #{$0} <story_file.txt> [--id <id> --level <level>]" unless story_file
+abort "Usage: #{$0} <story_file.txt> [--id <id> --level <n> | --gift <slug> | --chat]" unless story_file
 abort "File not found: #{story_file}" unless File.exist?(story_file)
 
-if options[:id].nil? != options[:level].nil?
-  abort "Both --id and --level must be provided together."
+targeting = [options[:level], options[:gift], options[:chat]].compact
+if options[:id] && targeting.size > 1
+  abort "Only one of --level, --gift, or --chat may be specified at a time."
+end
+if options[:id] && targeting.empty?
+  abort "With --id, also provide --level <n>, --gift <slug>, or --chat."
+end
+if targeting.any? && options[:id].nil?
+  abort "--id is required when using --level, --gift, or --chat."
 end
 
 text = File.read(story_file)
@@ -129,53 +147,46 @@ unless options[:id]
   exit
 end
 
-# --- Write mode: inject into opponents.yml ---
+# --- Write mode: append conversation to the matching conversations file ---
+
+require "fileutils"
+FileUtils.mkdir_p(CONV_DIR)
 
 opponent_id = options[:id]
-cinematic_level = options[:level]
 
-yml_lines = File.readlines(OPPONENTS_YML, chomp: true)
+conv_filename =
+  if options[:level]
+    "#{opponent_id}-cinematic-#{options[:level]}.yml"
+  elsif options[:gift]
+    "#{opponent_id}-gift-#{options[:gift]}.yml"
+  else
+    "#{opponent_id}-conversations.yml"
+  end
 
-# Find the opponent block by id
-opponent_line = yml_lines.index { |l| l.match?(/^- id: #{Regexp.escape(opponent_id)}\s*$/) }
-abort "Opponent '#{opponent_id}' not found in opponents.yml" if opponent_line.nil?
+conv_path = File.join(CONV_DIR, conv_filename)
+is_new_file = !File.exist?(conv_path)
 
-# Find the next top-level opponent (starts with "- id:") after our opponent, or EOF
-next_opponent_line = yml_lines[(opponent_line + 1)..].index { |l| l.match?(/^- id:/) }
-opponent_end = next_opponent_line ? (opponent_line + 1 + next_opponent_line) : yml_lines.length
+# Load existing conversations or start fresh
+existing = is_new_file ? [] : (YAML.load_file(conv_path) || [])
 
-opponent_block = yml_lines[opponent_line...opponent_end]
+new_conversation = { "chats" => blocks.map { |b| { "role" => b[:role], "content" => b[:content] } } }
 
-# Within the opponent block, find "  cinematics:" then the matching "  - level: N"
-cinematics_offset = opponent_block.index { |l| l.match?(/^  cinematics:\s*$/) }
-abort "No cinematics section found for opponent '#{opponent_id}'" if cinematics_offset.nil?
+# Cinematics get a background_url placeholder if file is brand new
+if options[:level] && is_new_file
+  new_conversation = { "background_url" => "/#{opponent_id}/cinematic#{options[:level]}.webp" }.merge(new_conversation)
+end
 
-level_offset = opponent_block[(cinematics_offset + 1)..].index { |l| l.match?(/^    - level: #{cinematic_level}\s*$/) }
-abort "Cinematic level #{cinematic_level} not found for opponent '#{opponent_id}'" if level_offset.nil?
+existing << new_conversation
+File.write(conv_path, existing.to_yaml)
 
-level_abs = opponent_line + cinematics_offset + 1 + level_offset
+if is_new_file
+  puts "Note: wire up #{conv_filename} in opponents.yml under the matching conversations: key."
+end
 
-# Find the "      conversations:" line within this level block
-# The level block ends when we hit the next "    - level:" or end of opponent block
-level_block_start = level_abs + 1
-level_block_end = opponent_block[(level_abs - opponent_line + 1)..].index { |l| l.match?(/^    - level:/) }
-level_block_end = level_block_end ? (opponent_line + level_abs - opponent_line + 1 + level_block_end) : opponent_end
+label =
+  if options[:level]    then "#{opponent_id} cinematic level #{options[:level]}"
+  elsif options[:gift]  then "#{opponent_id} gift #{options[:gift]}"
+  else                       "#{opponent_id} random conversations"
+  end
 
-conversations_offset = yml_lines[level_block_start...level_block_end].index { |l| l.match?(/^      conversations:\s*$/) }
-abort "No conversations key found under cinematic level #{cinematic_level}" if conversations_offset.nil?
-
-conversations_abs = level_block_start + conversations_offset
-
-# Insert new conversation block after the conversations: key.
-# A conversation entry starts with "        - chats:" (8 spaces).
-new_conversation_lines = [
-  "        - background_url: /#{opponent_id}/b1.png",
-  "          chats:"
-] + format_chat_lines(blocks, indent: "            ")
-
-insert_at = conversations_abs + 1
-yml_lines.insert(insert_at, *new_conversation_lines)
-
-File.write(OPPONENTS_YML, yml_lines.join("\n") + "\n")
-
-puts "Added #{blocks.length} chat blocks to #{opponent_id} cinematic level #{cinematic_level} in opponents.yml"
+puts "Appended #{blocks.length} chat blocks to #{label} in #{conv_filename}"
