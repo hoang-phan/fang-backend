@@ -2,25 +2,24 @@
 # Format mirrors the Opponent API response shape (camelCase keys) for easy reading,
 # with a few additions needed only for seeding:
 #   - moves: array of move slugs in battle-slot order (position 0-3)
-#   - avatars: array of public-folder paths (up to 5, one per level)
+#   - avatar: public-folder path
 #   - cinematics[].conversations[].background_url: background image for that conversation
 #   - cinematics[].conversations[]: array of conversations (ordered by position) for this cinematic
 #   - gifts[].conversations[]: array of conversations (ordered by position) for this gift
 #   - conversations: array of opponent-level chat conversations (picked randomly in-game)
 #
-# gold_reward: [min, max]
-# xp_reward:   [victoryXp, defeatXp]
+# gold_reward: reward
+# xp_reward: victoryXp
 # unlock_after: array of opponent slugs that must be defeated first
 
 - id: illyasviel
   name: Illyasviel von Einzbern
-  type: psychic
-  maxHp: 50
+  element_type: psychic
+  max_hp: 50
   base_damage: 8
   damage_variance: 0.20
-  gold_reward: [5, 15]
-  xp_reward: [50, 10]
-  level: 1
+  gold_reward: 15
+  xp_reward: 50
   flavour_text: Master of Berserker
   unlock_after: []
   moves:
@@ -28,12 +27,7 @@
     - psychicShield
     - psychicBlade
     - insomnia
-  avatars:
-    - /illyasviel/avatar1.jpg
-    - /illyasviel/avatar2.jpg
-    - /illyasviel/avatar3.jpg
-    - /illyasviel/avatar4.jpg
-    - /illyasviel/avatar5.jpg
+  avatar: /illyasviel/avatar5.jpg
   cinematics:
     - level: 1
       description: Dance Battle
@@ -148,13 +142,12 @@
 
 - id: virtuosa
   name: Virtuosa
-  type: dark
-  maxHp: 55
+  element_type: dark
+  max_hp: 55
   base_damage: 10
   damage_variance: 0.15
-  gold_reward: [7, 20]
-  xp_reward: [60, 20]
-  level: 1
+  gold_reward: 20
+  xp_reward: 60
   flavour_text: Agent of the Black Forest
   unlock_after: []
   moves:
@@ -162,12 +155,7 @@
     - nightShade
     - voidPulse
     - soulDrain
-  avatars:
-    - /virtuosa/avatar1.jpg
-    - /virtuosa/avatar2.jpg
-    - /virtuosa/avatar3.jpg
-    - /virtuosa/avatar4.jpg
-    - /virtuosa/avatar5.jpg
+  avatar: /virtuosa/avatar5.jpg
   cinematics:
     - level: 1
       relationship_gain: 10

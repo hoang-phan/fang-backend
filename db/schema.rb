@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_26_011220) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_27_044105) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -126,30 +126,19 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_26_011220) do
   end
 
   create_table "opponents", primary_key: "slug", id: :string, force: :cascade do |t|
-    t.string "avatar_1"
-    t.string "avatar_2"
-    t.string "avatar_3"
-    t.string "avatar_4"
-    t.string "avatar_5"
+    t.string "avatar"
     t.integer "base_damage", default: 10, null: false
-    t.string "cinematic_1"
-    t.string "cinematic_2"
-    t.string "cinematic_3"
-    t.string "cinematic_4"
-    t.string "cinematic_5"
     t.datetime "created_at", null: false
     t.float "damage_variance", default: 0.2, null: false
     t.string "element_type", default: "normal", null: false
     t.text "flavour_text"
-    t.integer "gold_reward_max", default: 15, null: false
-    t.integer "gold_reward_min", default: 5, null: false
+    t.integer "gold_reward"
     t.integer "level", default: 1, null: false
     t.integer "max_hp", default: 100, null: false
     t.string "name", null: false
     t.text "unlock_after"
     t.datetime "updated_at", null: false
-    t.integer "xp_reward_defeat", default: 10, null: false
-    t.integer "xp_reward_victory", default: 50, null: false
+    t.integer "xp_reward"
   end
 
   create_table "sprites", force: :cascade do |t|

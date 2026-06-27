@@ -54,7 +54,7 @@ Matches the frontend `OpponentDef` interface exactly.
   "xpReward": [300, 60],         // [victoryXp, defeatXp]
   "unlockAfter": ["goblin", "witch"],  // opponent slugs
   "moves": [ /* 0–4 Move objects, ordered by position */ ],
-  "avatars": ["/images/opponents/drake/avatar_1.webp", "…"],  // up to 5 public-folder URLs, one per opponent level
+  "avatar": "/images/opponents/drake/avatar_1.webp",  // public-folder URL
   "cinematics": [                // ordered by level
     {
       "level": 1,
@@ -261,11 +261,7 @@ opponent[xp_reward_victory] integer  >= 0
 opponent[xp_reward_defeat]  integer  >= 0
 opponent[unlock_after][]    string[] slugs of opponents that must be defeated first
 opponent[move_slugs][]      string[] up to 4 move slugs; order = battle position 0–3
-opponent[avatar_1]          string   public-folder path, e.g. /images/opponents/slug/avatar_1.webp
-opponent[avatar_2]          string
-opponent[avatar_3]          string
-opponent[avatar_4]          string
-opponent[avatar_5]          string
+opponent[avatar]            string   public-folder path, e.g. /images/opponents/slug/avatar_1.webp
 opponent[cinematics][][level]             integer  cinematic level (1-based)
 opponent[cinematics][][background_url]  string   public-folder path for the background image (stored on the conversation)
 opponent[cinematics][][description]     string   optional flavour text
@@ -297,8 +293,7 @@ curl -X POST http://localhost:3000/api/v1/opponents \
       "flavour_text": "Sneaky, volatile, and surprisingly crafty.",
       "unlock_after": ["slime"],
       "move_slugs": ["bodySlam", "tackle", "slash", "headbutt"],
-      "avatar_1": "/images/opponents/goblin/avatar_1.webp",
-      "cinematic_1": "/images/opponents/goblin/cinematic_1.webp"
+      "avatar": "/images/opponents/goblin/avatar_1.webp"
     }
   }'
 ```
@@ -431,10 +426,10 @@ Same body shape as POST. All fields optional.
 
 ## Image serving
 
-`avatars` and `cinematics` contain paths relative to the Rails public folder (e.g. `/images/opponents/slime/avatar_1.webp`). Files are served as static assets — no Active Storage involved. Prefix with the server origin to build full URLs:
+`avatar` and `cinematics` contain paths relative to the Rails public folder (e.g. `/images/opponents/slime/avatar_1.webp`). Files are served as static assets — no Active Storage involved. Prefix with the server origin to build full URLs:
 
 ```ts
-const fullUrl = `http://localhost:3000${opponent.avatars[0]}`
+const fullUrl = `http://localhost:3000${opponent.avatar}`
 ```
 
 Place files under `public/images/opponents/<slug>/`. Accepted formats: `.webp`, `.gif`, `.png`.

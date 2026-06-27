@@ -51,10 +51,8 @@ module Api
 
       def opponent_params
         params.expect(opponent: [ :slug, :name, :element_type, :max_hp,
-                                   :base_damage, :damage_variance, :gold_reward_min,
-                                   :gold_reward_max, :flavour_text, :level,
-                                   :xp_reward_victory, :xp_reward_defeat,
-                                   :avatar_1, :avatar_2, :avatar_3, :avatar_4, :avatar_5 ])
+                                   :base_damage, :damage_variance, :gold_reward,
+                                   :xp_reward, :flavour_text, :avatar ])
       end
 
       def assign_moves(opponent)
@@ -94,11 +92,10 @@ module Api
           damageVariance: opponent.damage_variance,
           goldReward:    [ opponent.gold_reward_min, opponent.gold_reward_max ],
           flavourText:   opponent.flavour_text,
-          level:         opponent.level,
           xpReward:      [ opponent.xp_reward_victory, opponent.xp_reward_defeat ],
           unlockAfter:   opponent.unlock_after_list,
           moves:         moves_by_pos,
-          avatars:       (1..5).map { |n| opponent.public_send(:"avatar_#{n}") }.compact,
+          avatar:        opponent.avatar,
           cinematics:    opponent.cinematics.sort_by(&:level).map { |c| serialize_cinematic(c) },
           gifts:         opponent.gifts.sort_by(&:name).map { |g| serialize_gift(g) },
           conversations: opponent.conversations.map { |c| serialize_conversation(c) }

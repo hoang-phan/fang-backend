@@ -93,7 +93,7 @@ Primary key is `slug` (string). Avatar and cinematic URLs are stored directly as
 | xp_reward_victory  | integer | XP player gets on win                          |
 | xp_reward_defeat   | integer | XP player gets on loss                         |
 | unlock_after       | text    | JSON array of opponent slugs                   |
-| avatar_1–5         | string  | public-folder paths, one per opponent level    |
+| avatar             | string  | public-folder paths    |
 
 `cinematic_1`–`cinematic_5` columns have been replaced by the `Cinematic` association (see below).
 
@@ -222,11 +222,11 @@ Controllers serialise to camelCase to match the frontend interfaces. The mapping
 | `leech`                    | `leech`           | omitted from response when null                |
 | `effect_boost_percent`     | `effectBoostPercent` | omitted from response when null             |
 | `effect_boost_kind`        | `effectBoostKind` | omitted from response when null (enum string)  |
-| `gold_reward_min/max`      | `goldReward`      | serialised as `[min, max]`                     |
+| `gold_reward`              | `goldReward`      |                      |
 | `flavour_text`             | `flavourText`     |                                                |
-| `xp_reward_victory/defeat` | `xpReward`        | serialised as `[victory, defeat]`              |
+| `xp_reward_victory/defeat` | `xpReward`        |   |
 | `unlock_after_list`        | `unlockAfter`     |                                                |
-| `avatar_1`–`avatar_5`      | `avatars`         | compact array of non-null values               |
+| `avatar`                   | `avatar`          |                |
 | `cinematic association`    | `cinematics`      | array of `{ level, description?, relationshipGain? }` objects — background URL is on the conversation |
 | `item.slug`                | `id`              | items resource                                 |
 | `item.base_damage`         | `baseDamage`      | omitted when null                              |
@@ -266,7 +266,7 @@ Controllers serialise to camelCase to match the frontend interfaces. The mapping
 
 ## Images (public folder)
 
-Avatar and cinematic URLs are plain strings stored in columns `avatar_1`–`avatar_5` and `cinematic_1`–`cinematic_5`. Files are placed under `public/images/opponents/<slug>/` and served as static assets by Rails.
+Avatar URL are plain string stored in columns `avatar`. Files are placed under `public/images/opponents/<slug>/` and served as static assets by Rails.
 
 Naming convention:
 ```
@@ -276,7 +276,7 @@ public/images/opponents/slime/cinematic_3.webp
 
 To update a URL via console:
 ```ruby
-Opponent.find("slime").update!(avatar_1: "/images/opponents/slime/avatar_1.webp")
+Opponent.find("slime").update!(avatar: "/images/opponents/slime/avatar_1.webp")
 ```
 
 No Active Storage is used for opponent images. The `active_storage_*` tables remain in the schema but are unused by opponents.
@@ -329,12 +329,6 @@ o.opponent_moves.destroy_all
 %w[venomStrike acidSpit toxicCloud poisonFang].each_with_index do |slug, i|
   o.opponent_moves.create!(move_slug: slug, position: i)
 end
-```
-
-**Attach an image manually:**
-```ruby
-o = Opponent.find("slime")
-o.avatar_1.attach(io: File.open("/path/to/idle.webp"), filename: "idle.webp", content_type: "image/webp")
 ```
 
 **Check what's seeded:**

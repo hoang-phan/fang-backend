@@ -39,24 +39,9 @@ opponents_data.each do |data|
   # Map API-shaped camelCase keys back to column names
   opponent = Opponent.find_or_initialize_by(slug: data[:id])
   opponent.assign_attributes(
-    name:               data[:name],
-    element_type:       data[:type],
-    max_hp:             data[:max_hp],
-    base_damage:        data[:base_damage],
-    damage_variance:    data[:damage_variance],
-    gold_reward_min:    data[:gold_reward][0],
-    gold_reward_max:    data[:gold_reward][1],
-    flavour_text:       data[:flavour_text],
-    level:              data[:level],
-    xp_reward_victory:  data[:xp_reward][0],
-    xp_reward_defeat:   data[:xp_reward][1],
-    avatar_1:           data.dig(:avatars, 0),
-    avatar_2:           data.dig(:avatars, 1),
-    avatar_3:           data.dig(:avatars, 2),
-    avatar_4:           data.dig(:avatars, 3),
-    avatar_5:           data.dig(:avatars, 4)
+    data.slice(:name, :element_type, :max_hp, :base_damage, :damage_variance, :gold_reward, :xp_reward, :avatar)
   )
-  opponent.unlock_after_list = data[:unlockAfter] || []
+  opponent.unlock_after_list = data[:unlock_after] || []
   opponent.save!
 
   opponent.opponent_moves.destroy_all

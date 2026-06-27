@@ -20,7 +20,6 @@ class Opponent < ApplicationRecord
   validates :damage_variance, numericality: { greater_than_or_equal_to: 0.0, less_than_or_equal_to: 1.0 }
   validates :gold_reward_min, numericality: { greater_than_or_equal_to: 0 }
   validates :gold_reward_max, numericality: { greater_than: 0 }
-  validates :level, numericality: { greater_than: 0 }
   validates :xp_reward_victory, numericality: { greater_than_or_equal_to: 0 }
   validates :xp_reward_defeat, numericality: { greater_than_or_equal_to: 0 }
 
