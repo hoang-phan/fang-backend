@@ -8,7 +8,8 @@ Rails.application.routes.draw do
         resources :gifts, only: %i[index show create update destroy]
       end
       resources :items, param: :id
-      get "assets", to: "assets#index"
+      get  "assets", to: "assets#index"
+      post "assets/upload_conversation_yml", to: "assets#upload_conversation_yml"
     end
   end
 end

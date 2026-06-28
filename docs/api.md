@@ -460,6 +460,33 @@ const fullUrl = `http://localhost:3000${path}`
 
 ---
 
+### POST /api/v1/assets/upload_conversation_yml
+Writes a YAML file into `db/seeds/conversations/` on the server. Intended for the conversation editor to persist its output when the browser cannot write to the filesystem directly.
+
+Accepts `multipart/form-data`.
+
+**Fields**
+```
+file      file    required — the .yml file contents
+filename  string  required — target filename, must end with .yml (basename only; directory traversal is stripped)
+```
+
+**Response** `200`
+```jsonc
+{ "path": "/absolute/path/to/db/seeds/conversations/my-conversation.yml" }
+```
+
+**Response** `422` — validation errors
+
+**Example (curl)**
+```bash
+curl -X POST http://localhost:3000/api/v1/assets/upload_conversation_yml \
+  -F "filename=illyasviel-conversations.yml" \
+  -F "file=@/path/to/illyasviel-conversations.yml"
+```
+
+---
+
 ## Health check
 
 ### GET /up

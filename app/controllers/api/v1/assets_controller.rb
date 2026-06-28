@@ -13,6 +13,23 @@ module Api
 
         render json: paths
       end
+
+      def upload_conversation_yml
+        file     = params[:file]
+        filename = params[:filename].to_s.strip
+
+        return render json: { errors: [ "filename is required" ] }, status: :unprocessable_entity if filename.blank?
+        return render json: { errors: [ "file is required" ] }, status: :unprocessable_entity if file.blank?
+
+        unless filename.end_with?(".yml")
+          return render json: { errors: [ "filename must end with .yml" ] }, status: :unprocessable_entity
+        end
+
+        dest = Rails.root.join("db", "seeds", "conversations", File.basename(filename))
+        File.write(dest, file.read)
+
+        render json: { path: dest.to_s }, status: :ok
+      end
     end
   end
 end
