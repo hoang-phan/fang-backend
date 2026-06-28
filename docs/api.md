@@ -436,6 +436,26 @@ Place files under `public/images/opponents/<slug>/`. Accepted formats: `.webp`, 
 
 ---
 
+## Opponent Options
+
+### GET /api/v1/opponent_options
+Lightweight endpoint for the conversation editor. Returns each opponent's id, name, and gift names in parameterized form — suitable for constructing seed filenames like `{id}-gift-{giftName}.yml`.
+
+**Response** `200`
+```jsonc
+[
+  {
+    "id": "illyasviel",
+    "name": "Illyasviel",
+    "giftNames": ["chocolate-box", "magic-mugs", "tulip-bouquet"]
+  }
+]
+```
+
+`giftNames` entries are the gift name lowercased and hyphenated (e.g. "Gold Pendant" → `"gold-pendant"`). Ordered by gift name.
+
+---
+
 ## Assets
 
 ### GET /api/v1/assets
@@ -483,6 +503,42 @@ filename  string  required — target filename, must end with .yml (basename onl
 curl -X POST http://localhost:3000/api/v1/assets/upload_conversation_yml \
   -F "filename=illyasviel-conversations.yml" \
   -F "file=@/path/to/illyasviel-conversations.yml"
+```
+
+---
+
+## Scripts
+
+### POST /api/v1/scripts/convert
+Converts a plain-text narrative script into a YAML conversation block. Dialogue in double quotes becomes `role: hero`; surrounding narrative becomes `role: other` (wrapped in parentheses).
+
+**Request body** (JSON)
+```jsonc
+{
+  "text": "She smiled. \"Hello there,\" she said. He nodded in silence."
+}
+```
+
+**Response** `200` — YAML string (`text/yaml`)
+```yaml
+- chats:
+  - role: other
+    content: (She smiled.)
+  - role: hero
+    content: Hello there,
+  - role: other
+    content: (she said.)
+  - role: other
+    content: (He nodded in silence.)
+```
+
+**Response** `422` — validation errors
+
+**Example (curl)**
+```bash
+curl -X POST http://localhost:3000/api/v1/scripts/convert \
+  -H "Content-Type: application/json" \
+  -d '{"text": "She smiled. \"Hello,\" she said."}'
 ```
 
 ---

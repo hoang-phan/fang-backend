@@ -28,8 +28,9 @@ curl http://localhost:3000/api/v1/moves | jq length # → 28
 app/
   controllers/
     api/v1/
-      moves_controller.rb       # CRUD for Move
-      opponents_controller.rb   # CRUD for Opponent + file uploads
+      moves_controller.rb           # CRUD for Move
+      opponents_controller.rb       # CRUD for Opponent + file uploads
+      opponent_options_controller.rb # Lightweight read — id/name/giftNames for conversation editor
   models/
     move.rb
     opponent.rb
