@@ -8,6 +8,7 @@ Rails.application.routes.draw do
         resources :gifts, only: %i[index show create update destroy]
       end
       resources :items, param: :id
+      get "assets", to: "assets#index"
     end
   end
 end

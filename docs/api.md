@@ -436,6 +436,30 @@ Place files under `public/images/opponents/<slug>/`. Accepted formats: `.webp`, 
 
 ---
 
+## Assets
+
+### GET /api/v1/assets
+Returns all image and video file paths available in the `public/` folder (recursive).  
+Useful for populating pickers in the conversation editor.
+
+Included extensions: `.webp`, `.gif`, `.png`, `.jpg`, `.jpeg`, `.mp4`
+
+**Response** `200`
+```json
+[
+  "/illyasviel/avatar1.jpg",
+  "/illyasviel/cinematic3.mp4",
+  "/virtuosa/cinematic1.webp"
+]
+```
+
+Each path is a public-folder-relative URL. Prefix with the server origin to build a full URL:
+```ts
+const fullUrl = `http://localhost:3000${path}`
+```
+
+---
+
 ## Health check
 
 ### GET /up
