@@ -48,7 +48,7 @@ opponents_data.each do |data|
   # Map API-shaped camelCase keys back to column names
   opponent = Opponent.find_or_initialize_by(slug: data[:id])
   opponent.assign_attributes(
-    data.slice(:name, :element_type, :max_hp, :base_damage, :base_defense, :damage_variance, :gold_reward, :xp_reward, :avatar, :flavour_text)
+    data.slice(:name, :element_type, :rarity, :max_hp, :base_damage, :base_defense, :damage_variance, :gold_reward, :xp_reward, :avatar, :flavour_text)
   )
   opponent.unlock_after_list = data[:unlock_after] || []
   opponent.save!

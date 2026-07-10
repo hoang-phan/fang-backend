@@ -12,6 +12,7 @@ Rails.application.routes.draw do
       get  "assets", to: "assets#index"
       post "assets/upload_conversation_yml", to: "assets#upload_conversation_yml"
       post "scripts/convert", to: "scripts#convert"
+      post "gacha", to: "gacha#pull"
     end
   end
 end

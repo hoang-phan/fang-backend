@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_27_044105) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_10_145841) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -132,13 +132,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_27_044105) do
     t.float "damage_variance", default: 0.2, null: false
     t.string "element_type", default: "normal", null: false
     t.text "flavour_text"
+    t.string "gacha_key", null: false
     t.integer "gold_reward"
     t.integer "level", default: 1, null: false
     t.integer "max_hp", default: 100, null: false
     t.string "name", null: false
+    t.integer "rarity", default: 0, null: false
     t.text "unlock_after"
     t.datetime "updated_at", null: false
     t.integer "xp_reward"
+    t.index ["gacha_key"], name: "index_opponents_on_gacha_key", unique: true
   end
 
   create_table "sprites", force: :cascade do |t|

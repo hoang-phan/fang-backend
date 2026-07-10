@@ -13,6 +13,11 @@ CORS is open to `http://localhost:5173` and `http://localhost:3000`.
 "normal" | "fire" | "water" | "electric" | "grass" | "ice" | "poison" | "earth" | "dark" | "psychic"
 ```
 
+### Rarity
+```
+"normal" | "rare" | "sr" | "ssr" | "lr"
+```
+
 ### Move object
 Matches the frontend `Move` interface exactly.
 
@@ -45,6 +50,7 @@ Matches the frontend `OpponentDef` interface exactly.
   "id": "drake",
   "name": "Drake Hatchling",
   "type": "fire",
+  "rarity": "sr",             // Rarity
   "maxHp": 140,
   "baseDamage": 20,
   "damageVariance": 0.15,
@@ -224,18 +230,38 @@ Same body shape as POST (all fields optional). Only provided fields are updated.
 
 ## Opponents
 
-### GET /api/v1/opponents
-Returns all opponents ordered by name, with embedded moves and image URLs.
+Every opponent has a `gacha_key` — a random, unguessable string distinct from its `slug`/`id`. The frontend never sees the bare `gacha_key`. It is only ever transmitted **encrypted**, paired with the unix timestamp used as the encryption salt. See [Gacha encryption scheme](#gacha-encryption-scheme) below.
 
-**Response** `200`
+### GET /api/v1/opponents
+Returns only the opponents whose encrypted key the caller can prove knowledge of. Does **not** return all opponents — there is no way to list every opponent through this endpoint.
+
+**Query params**
+```
+timestamp   integer  required — unix timestamp (seconds) used as the encryption salt for every key below
+keys[]      string[] required — encryptedKey values previously obtained from this endpoint or from POST /api/v1/gacha
+```
+
+Each key is decrypted using `timestamp` as salt. A key is silently dropped (not an error) if:
+- `timestamp` is more than 60 seconds old or in the future
+- the key fails to decrypt/verify against that timestamp
+- the decrypted value doesn't match any opponent's `gacha_key`
+
+**Response** `200` — matching opponents only, ordered by name. Each object additionally includes `timestamp` (echoed back) and a freshly-encrypted `encryptedKey` for the same opponent, so the frontend can keep re-proving it holds that opponent without ever seeing the bare key.
 ```json
-[ /* Opponent[] */ ]
+[ /* Opponent[] & { timestamp: number, encryptedKey: string } */ ]
+```
+
+**Example**
+```bash
+curl -G http://localhost:3000/api/v1/opponents \
+  --data-urlencode "timestamp=1783651354" \
+  --data-urlencode "keys[]=qFvyBB5LujlEaAclyHgz7JZUaV+vo5s6--DuOroiL4tKa4DgDR--zSQWUyCH1wCiDEIJdHmBrg=="
 ```
 
 ---
 
 ### GET /api/v1/opponents/:id
-`:id` is the opponent's slug (e.g. `drake`).
+`:id` is the opponent's slug (e.g. `drake`). Admin/editor use only — unrelated to the gacha flow, returns the opponent directly with no key required.
 
 **Response** `200` — Opponent object  
 **Response** `404` — record not found
@@ -250,6 +276,7 @@ Accepts `multipart/form-data` when uploading images; JSON otherwise.
 opponent[slug]              string   required, unique
 opponent[name]              string   required
 opponent[element_type]      string   required, one of ElementType
+opponent[rarity]            string   one of Rarity, default "normal"
 opponent[max_hp]            integer  required, > 0
 opponent[base_damage]       integer  required, > 0
 opponent[damage_variance]   float    0.0–1.0
@@ -316,6 +343,65 @@ Passing `opponent[avatar_N]` / `opponent[cinematic_N]` **replaces** that specifi
 Destroys the opponent and all its `opponent_moves` records. Active Storage attachments are purged asynchronously by Rails.
 
 **Response** `204` — no content
+
+---
+
+## Gacha
+
+### POST /api/v1/gacha
+Picks one random opponent and returns it along with an encrypted key the frontend can store and later exchange via `GET /api/v1/opponents`. The bare `gacha_key` is never returned — only the encrypted form.
+
+The pull is two-stage: first a `rarity` tier is chosen by weighted random roll, then one opponent is picked uniformly at random from all opponents of that tier.
+
+Rarity pull weights:
+```
+normal  60%
+rare    20%
+sr      12%
+ssr      6%
+lr       2%
+```
+
+**Request body**: none required.
+
+**Response** `200`
+```jsonc
+{
+  "timestamp": 1783651354,
+  "encryptedKey": "qFvyBB5LujlEaAclyHgz7JZUaV+vo5s6--DuOroiL4tKa4DgDR--zSQWUyCH1wCiDEIJdHmBrg==",
+  // Opponent object, same shape as GET /api/v1/opponents:
+  "id": "virtuosa",
+  "name": "Virtuosa",
+  "rarity": "rare",
+  // ...rest of Opponent fields
+  "moves": [ /* Move[] */ ],
+  "cinematics": [ /* … */ ],
+  "gifts": [ /* … */ ],
+  "conversations": [ /* … */ ]
+}
+```
+
+**Example**
+```bash
+curl -X POST http://localhost:3000/api/v1/gacha
+```
+
+---
+
+### Gacha encryption scheme
+
+`gacha_key` is a random per-opponent string (distinct from `slug`), generated once when the opponent is created and never exposed in plaintext by any endpoint.
+
+Encryption:
+- Cipher: AES-256-GCM via `ActiveSupport::MessageEncryptor`.
+- Key derivation: HKDF (`ActiveSupport::KeyGenerator`) over the Rails `secret_key_base`, salted with `"gacha_cipher/#{timestamp}"` — so the derived key (and therefore the ciphertext) is different every time the timestamp changes, even for the same `gacha_key`.
+- Expiry: on decrypt, the server rejects the key if `abs(now - timestamp) > 60` seconds. This bounds how long an intercepted `(timestamp, encryptedKey)` pair remains replayable.
+
+This is obfuscation at the API layer (to make casual eavesdropping/replay harder), not a security boundary — anyone who can call the API can still call `POST /api/v1/gacha` repeatedly to discover opponents.
+
+Flow:
+1. Frontend calls `POST /api/v1/gacha` → gets `{ timestamp, encryptedKey, ...opponent }`. It stores `encryptedKey` (and `timestamp`, or a fresh one from a later `GET /api/v1/opponents` response) to remember it "owns" this opponent.
+2. Later, to fetch full data for its collected opponents, frontend calls `GET /api/v1/opponents?timestamp=<now>&keys[]=<encryptedKey>&keys[]=...`. Because ciphertext is timestamp-salted, the frontend must re-encrypt — which it cannot do itself (it never has the bare key). Instead, each `GET /api/v1/opponents` response returns a **freshly re-encrypted** `encryptedKey` (salted with the `timestamp` from that same request) for every opponent returned, which the frontend stores and sends next time with a new timestamp.
 
 ---
 

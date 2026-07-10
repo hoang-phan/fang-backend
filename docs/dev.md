@@ -29,12 +29,17 @@ app/
   controllers/
     api/v1/
       moves_controller.rb           # CRUD for Move
-      opponents_controller.rb       # CRUD for Opponent + file uploads
+      opponents_controller.rb       # CRUD for Opponent + file uploads; index is gacha-key-gated (not a full list)
       opponent_options_controller.rb # Lightweight read — id/name/giftNames for conversation editor
+      gacha_controller.rb           # POST /gacha — random opponent pull
+    concerns/
+      opponent_serialization.rb     # shared serialize_opponent/_move/_gift/... used by opponents + gacha controllers
   models/
     move.rb
-    opponent.rb
+    opponent.rb                 # has gacha_key — random, unguessable, distinct from slug
     opponent_move.rb            # join table: position-ordered moves per opponent
+  services/
+    gacha_cipher.rb              # encrypt/decrypt gacha_key using timestamp-salted AES-256-GCM, 60s expiry
 
 config/
   routes.rb                     # /api/v1/moves, /api/v1/opponents
@@ -84,6 +89,7 @@ Primary key is `slug` (string). Avatar and cinematic URLs are stored directly as
 | slug               | string  | PK                                             |
 | name               | string  |                                                |
 | element_type       | string  | defensive type for damage effectiveness        |
+| rarity             | integer | enum (default 0); normal rare sr ssr lr — used to weight gacha pulls |
 | max_hp             | integer |                                                |
 | base_damage        | integer |                                                |
 | damage_variance    | float   | 0.0–1.0                                        |
@@ -95,6 +101,7 @@ Primary key is `slug` (string). Avatar and cinematic URLs are stored directly as
 | xp_reward_defeat   | integer | XP player gets on loss                         |
 | unlock_after       | text    | JSON array of opponent slugs                   |
 | avatar             | string  | public-folder paths    |
+| gacha_key          | string  | unique, random (`SecureRandom.urlsafe_base64(16)`), auto-generated on create; never exposed in plaintext — see [Gacha](#gacha) |
 
 `cinematic_1`–`cinematic_5` columns have been replaced by the `Cinematic` association (see below).
 
@@ -212,6 +219,7 @@ Controllers serialise to camelCase to match the frontend interfaces. The mapping
 |----------------------------|-------------------|------------------------------------------------|
 | `slug`                     | `id`              |                                                |
 | `element_type`             | `type`            |                                                |
+| `rarity`                   | `rarity`          | opponent only; enum string (`normal` `rare` `sr` `ssr` `lr`) |
 | `mp_cost`                  | `mpCost`          |                                                |
 | `base_damage`              | `baseDamage`      |                                                |
 | `damage_variance`          | `damageVariance`  |                                                |
@@ -244,6 +252,21 @@ Controllers serialise to camelCase to match the frontend interfaces. The mapping
 `move.icon` is **not** serialised — the frontend uses the `type` field to derive the icon.
 
 `goldReward` and `xpReward` are serialised as `[min, max]` arrays — exactly the tuple shape the frontend expects.
+
+`opponent.gacha_key` is **never** serialised as-is. `GET /api/v1/opponents` and `POST /api/v1/gacha` instead include `encryptedKey` (ciphertext) + `timestamp` — see [Gacha](#gacha).
+
+---
+
+## Gacha
+
+`GET /api/v1/opponents` no longer returns every opponent. It requires `timestamp` + `keys[]` (encrypted `gacha_key` values) and returns only the matching opponents. `POST /api/v1/gacha` picks one random opponent and hands back its encrypted key so the frontend can "collect" it without ever seeing the bare key.
+
+- `Opponent#gacha_key` — random string set via `before_validation :ensure_gacha_key, on: :create` in `app/models/opponent.rb`. Unique, required.
+- `Opponent.gacha_pull` — weighted-random rarity roll (`Opponent::RARITY_WEIGHTS`: normal 60 / rare 20 / sr 12 / ssr 6 / lr 2), then a uniformly random opponent `where(rarity: picked_rarity)`. Returns `nil` if no opponent exists in the rolled tier.
+- `GachaCipher` (`app/services/gacha_cipher.rb`) — `.encrypt(raw_key, timestamp)` / `.decrypt(encrypted_key, timestamp)`. AES-256-GCM, key derived from `secret_key_base` salted with the timestamp, 60s expiry window enforced on decrypt. Raises `GachaCipher::ExpiredError` / `GachaCipher::InvalidError` — both are treated as "this key doesn't resolve to an opponent" (filtered out silently, not a 4xx).
+- `OpponentSerialization` concern (`app/controllers/concerns/opponent_serialization.rb`) — shared `serialize_opponent`/`serialize_move`/etc. used by both `OpponentsController` and `GachaController` so the two endpoints can't drift out of sync on the Opponent JSON shape. `serialize_opponent(opponent, timestamp:)` only adds `encryptedKey`/`timestamp` to the payload when a timestamp is passed.
+
+Full CRUD (`show`, `create`, `update`, `destroy`) on `/api/v1/opponents/:id` is unaffected — those are admin/editor operations keyed by `slug`, unrelated to the gacha flow.
 
 ---
 
