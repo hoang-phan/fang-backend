@@ -1,0 +1,3 @@
+backend: bin/rails server -p 3000
+fang: cd ../fang && npm run dev -- --port 5173
+editor: cd ../fang-conversation-editor && npm run dev -- --port 5174

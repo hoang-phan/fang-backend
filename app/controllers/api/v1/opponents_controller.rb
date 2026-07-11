@@ -7,18 +7,18 @@ module Api
 
       def index
         timestamp = params[:timestamp]
-        encrypted_keys = Array(params[:keys])
+        obfuscated_keys = Array(params[:keys])
 
-        gacha_keys = encrypted_keys.filter_map do |encrypted_key|
-          GachaCipher.decrypt(encrypted_key, timestamp)
-        rescue GachaCipher::ExpiredError, GachaCipher::InvalidError
+        gacha_keys = obfuscated_keys.filter_map do |obfuscated_key|
+          GachaCipher.deobfuscate(obfuscated_key, timestamp)
+        rescue StandardError
           nil
         end
 
         @opponents = Opponent.where(gacha_key: gacha_keys)
                               .includes(:moves, { cinematics: { conversations: { chats: :sprites } } }, { gifts: { conversations: { chats: :sprites } } }, { conversations: { chats: :sprites } })
                               .order(:name)
-        render json: @opponents.map { |o| serialize_opponent(o, timestamp: timestamp) }
+        render json: @opponents.map { |o| serialize_opponent(o) }
       end
 
       def show

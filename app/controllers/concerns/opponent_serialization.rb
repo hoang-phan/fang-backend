@@ -25,7 +25,7 @@ module OpponentSerialization
 
     if timestamp.present?
       h[:timestamp] = timestamp.to_i
-      h[:encryptedKey] = GachaCipher.encrypt(opponent.gacha_key, timestamp)
+      h[:encryptedKey] = GachaCipher.obfuscate(opponent.gacha_key, timestamp)
     end
 
     h
