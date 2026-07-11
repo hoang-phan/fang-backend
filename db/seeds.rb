@@ -9,6 +9,9 @@ def resolve_conversations(value)
   when Array  then value
   else             []
   end
+rescue => e
+  p "Error: #{e}"
+  []
 end
 
 def create_chat(conversation, chat_params)

@@ -17,7 +17,7 @@ class Move < ApplicationRecord
   validates :level, numericality: { greater_than: 0 }
   validates :max_level, numericality: { greater_than: 0 }
   validates :effect_turns, numericality: { greater_than: 0, only_integer: true }, allow_nil: true
-  validates :effect_damage, numericality: { greater_than_or_equal_to: 0, only_integer: true }, allow_nil: true
+  validates :effect_damage, numericality: { only_integer: true }, allow_nil: true
   validates :effect_prob, numericality: { greater_than: 0, less_than_or_equal_to: 100 }, allow_nil: true
   validates :leech, numericality: { greater_than: 0, less_than_or_equal_to: 100 }, allow_nil: true
 
