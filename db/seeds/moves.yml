@@ -1,19 +1,11 @@
 # Moves seed data.
 # Keys match the Move model columns directly.
 # element_type: one of normal fire water electric grass ice poison earth dark psychic
-# Optional fields (omit to leave null): effect_turns, effect_damage, effect_prob, leech
+# Optional fields (omit to leave null): effect_turns, effect_damage, effect_prob, leech, effect_stun, base_defense, effect_boost_percent, effect_boost_kind...
 
-# Normal
-- slug: bodySlam
-  name: Body Slam
-  description: Crashes full force into the foe.
-  element_type: normal
-  mp_cost: 15
-  base_damage: 14
-  damage_variance: 0.20
-  level: 1
-  max_level: 5
-
+# ==========================================
+# NORMAL ⚪ (8/8)
+# ==========================================
 - slug: tackle
   name: Tackle
   description: A straightforward physical charge.
@@ -21,6 +13,26 @@
   mp_cost: 10
   base_damage: 10
   damage_variance: 0.25
+  level: 1
+  max_level: 5
+
+- slug: headbutt
+  name: Headbutt
+  description: Smash your skull into the foe.
+  element_type: normal
+  mp_cost: 12
+  base_damage: 12
+  damage_variance: 0.20
+  level: 1
+  max_level: 5
+
+- slug: bodySlam
+  name: Body Slam
+  description: Crashes full force into the foe.
+  element_type: normal
+  mp_cost: 15
+  base_damage: 14
+  damage_variance: 0.20
   level: 1
   max_level: 5
 
@@ -34,13 +46,13 @@
   level: 1
   max_level: 5
 
-- slug: headbutt
-  name: Headbutt
-  description: Smash your skull into the foe.
+- slug: hyperBeam
+  name: Hyper Beam
+  description: Fires a powerful but exhausting beam of raw energy.
   element_type: normal
-  mp_cost: 12
-  base_damage: 12
-  damage_variance: 0.20
+  mp_cost: 35
+  base_damage: 28
+  damage_variance: 0.10
   level: 1
   max_level: 5
 
@@ -68,58 +80,23 @@
   level: 1
   max_level: 5
 
-# Poison
-- slug: venomStrike
-  name: Venom Strike
-  description: A swift poisonous lunge.
-  element_type: poison
-  mp_cost: 18
-  base_damage: 11
-  damage_variance: 0.25
+- slug: focusEnergy
+  name: Focus Energy
+  description: Sharpens concentration to increase raw physical output.
+  element_type: normal
+  mp_cost: 12
+  base_damage: 0
+  damage_variance: 0
+  effect_turns: 3
+  effect_prob: 100
+  effect_boost_percent: 15
+  effect_boost_kind: attack_element
   level: 1
   max_level: 5
 
-- slug: acidSpit
-  name: Acid Spit
-  description: Launches a glob of corrosive acid.
-  element_type: poison
-  mp_cost: 15
-  base_damage: 13
-  damage_variance: 0.20
-  level: 1
-  max_level: 5
-
-- slug: toxicCloud
-  name: Toxic Cloud
-  description: Engulfs the foe in a noxious mist.
-  element_type: poison
-  mp_cost: 25
-  base_damage: 19
-  damage_variance: 0.15
-  level: 1
-  max_level: 5
-
-- slug: poisonFang
-  name: Poison Fang
-  description: Sinks venomous fangs into the target.
-  element_type: poison
-  mp_cost: 22
-  base_damage: 17
-  damage_variance: 0.18
-  level: 1
-  max_level: 5
-
-# Fire
-- slug: fireball
-  name: Fireball
-  description: Hurls a blazing sphere.
-  element_type: fire
-  mp_cost: 20
-  base_damage: 16
-  damage_variance: 0.15
-  level: 1
-  max_level: 5
-
+# ==========================================
+# FIRE 🔥 (8/8)
+# ==========================================
 - slug: emberBlast
   name: Ember Blast
   description: A burst of scorching embers.
@@ -127,6 +104,16 @@
   mp_cost: 15
   base_damage: 13
   damage_variance: 0.20
+  level: 1
+  max_level: 5
+
+- slug: fireball
+  name: Fireball
+  description: Hurls a blazing sphere.
+  element_type: fire
+  mp_cost: 20
+  base_damage: 16
+  damage_variance: 0.15
   level: 1
   max_level: 5
 
@@ -164,17 +151,140 @@
   level: 1
   max_level: 5
 
-# Electric
-- slug: thunderbolt
-  name: Thunderbolt
-  description: A crackling bolt of lightning.
-  element_type: electric
-  mp_cost: 25
+- slug: ignite
+  name: Ignite
+  description: Sets the foe ablaze, dealing damage over time.
+  element_type: fire
+  mp_cost: 16
+  base_damage: 5
+  damage_variance: 0.20
+  effect_turns: 3
+  effect_damage: 6
+  effect_prob: 100
+  level: 1
+  max_level: 5
+
+- slug: overheat
+  name: Overheat
+  description: Releases an unstable, massive explosion of thermal energy.
+  element_type: fire
+  mp_cost: 40
+  base_damage: 32
+  damage_variance: 0.15
+  level: 1
+  max_level: 5
+
+- slug: fireShield
+  name: Fire Shield
+  description: Surrounds the user with a barrier of flame that raises defense.
+  element_type: fire
+  mp_cost: 18
+  base_damage: 0
+  damage_variance: 0
+  effect_turns: 3
+  effect_prob: 100
+  effect_boost_percent: 10
+  effect_boost_kind: defense
+  level: 1
+  max_level: 5
+
+# ==========================================
+# WATER 💧 (8/8)
+# ==========================================
+- slug: waterGun
+  name: Water Gun
+  description: Shoots a stream of water.
+  element_type: water
+  mp_cost: 22
+  base_damage: 19
+  damage_variance: 0.12
+  level: 1
+  max_level: 5
+
+- slug: waterPulse
+  name: Water Pulse
+  description: Creates a pulse of water.
+  element_type: water
+  mp_cost: 28
   base_damage: 22
+  damage_variance: 0.12
+  level: 1
+  max_level: 5
+
+- slug: aquaJet
+  name: Aqua Jet
+  description: High-speed low-cost aquatic strike.
+  element_type: water
+  mp_cost: 12
+  base_damage: 11
+  damage_variance: 0.20
+  level: 1
+  max_level: 5
+
+- slug: hydroTorrent
+  name: Hydro Torrent
+  description: Unleashes a crushing wall of high-pressure water.
+  element_type: water
+  mp_cost: 36
+  base_damage: 28
   damage_variance: 0.10
   level: 1
   max_level: 5
 
+- slug: fountainOfEnergy
+  name: Fountain of Energy
+  description: Restore MP per turn.
+  element_type: water
+  mp_cost: 28
+  base_damage: 0
+  damage_variance: 0
+  effect_turns: 3
+  effect_prob: 100
+  effect_boost_percent: 10
+  effect_boost_kind: mp
+  level: 1
+  max_level: 5
+
+- slug: acidRain
+  name: Acid Rain
+  description: Calls down a dark downpour that corrodes target defense.
+  element_type: water
+  mp_cost: 20
+  base_damage: 8
+  damage_variance: 0.15
+  effect_turns: 3
+  effect_boost_percent: -10
+  effect_boost_kind: defense
+  effect_prob: 80
+  level: 1
+  max_level: 5
+
+- slug: whirlpool
+  name: Whirlpool
+  description: Traps the foe in a crushing vortex.
+  element_type: water
+  mp_cost: 25
+  base_damage: 15
+  damage_variance: 0.18
+  effect_turns: 2
+  effect_damage: 5
+  effect_prob: 50
+  level: 1
+  max_level: 5
+
+- slug: tidalWash
+  name: Tidal Wash
+  description: Cleansing wave that provides moderate recovery.
+  element_type: water
+  mp_cost: 32
+  base_damage: -18
+  damage_variance: 0.05
+  level: 1
+  max_level: 5
+
+# ==========================================
+# ELECTRIC ⚡ (8/8)
+# ==========================================
 - slug: staticShock
   name: Static Shock
   description: Zaps the foe with built-up static.
@@ -195,6 +305,16 @@
   level: 1
   max_level: 5
 
+- slug: thunderbolt
+  name: Thunderbolt
+  description: A crackling bolt of lightning.
+  element_type: electric
+  mp_cost: 25
+  base_damage: 22
+  damage_variance: 0.10
+  level: 1
+  max_level: 5
+
 - slug: thunderRoar
   name: Thunder Roar
   description: A deafening electric shockwave.
@@ -205,75 +325,338 @@
   level: 1
   max_level: 5
 
-# Dark
-- slug: shadowClaw
-  name: Shadow Claw
-  description: Slashes with a claw of pure darkness.
-  element_type: dark
-  mp_cost: 28
-  base_damage: 21
-  damage_variance: 0.18
-  level: 1
-  max_level: 5
-
-- slug: nightShade
-  name: Night Shade
-  description: Warps reality with deep shadow.
-  element_type: dark
+- slug: lightningSpike
+  name: Lightning Spike
+  description: Drops a piercing jolt from above with a small chance to stun.
+  element_type: electric
   mp_cost: 20
   base_damage: 16
-  damage_variance: 0.20
-  level: 1
-  max_level: 5
-
-- slug: voidPulse
-  name: Void Pulse
-  description: Fires a pulse of annihilating energy.
-  element_type: dark
-  mp_cost: 30
-  base_damage: 24
   damage_variance: 0.15
+  effect_stun: true
+  effect_turns: 1
+  effect_prob: 15
   level: 1
   max_level: 5
 
-- slug: soulDrain
-  name: Soul Drain
-  description: Drains the life force of the foe.
-  element_type: dark
-  mp_cost: 25
-  base_damage: 20
-  damage_variance: 0.10
-  leech: 30
-  level: 1
-  max_level: 5
-
-- slug: ultraInstinct
-  name: Ultra Instinct
-  description: User can evade attacks.
-  element_type: dark
-  mp_cost: 10
+- slug: overcharge
+  name: Overcharge
+  description: Forces current into mechanisms, boosting agility/evasion.
+  element_type: electric
+  mp_cost: 14
   base_damage: 0
   damage_variance: 0
   effect_turns: 3
   effect_prob: 100
-  effect_boost_percent: 10
+  effect_boost_percent: 15
   effect_boost_kind: evasion
   level: 1
   max_level: 5
 
-# Earth
-- slug: earthQuake
-  name: Earthquake
-  description: Shakes the ground with tremendous force.
-  element_type: earth
-  mp_cost: 35
-  base_damage: 27
-  damage_variance: 0.10
-  effect_turns: 2
-  effect_prob: 30
+- slug: electromagneticField
+  name: EM Field
+  description: Generates a disruptive aura that slightly lowers opponent attack.
+  element_type: electric
+  mp_cost: 18
+  base_damage: 0
+  damage_variance: 0
+  effect_turns: 3
+  effect_prob: 100
+  effect_boost_percent: -10
+  effect_boost_kind: attack_all
   level: 1
   max_level: 5
 
+- slug: plasmaticdischarge
+  name: Plasma Discharge
+  description: Emits high-voltage heat that risks critical variances.
+  element_type: electric
+  mp_cost: 35
+  base_damage: 29
+  damage_variance: 0.30
+  level: 1
+  max_level: 5
+
+# ==========================================
+# GRASS 🌿 (8/8)
+# ==========================================
+- slug: vineWhip
+  name: Vine Whip
+  description: Strikes the enemy with slender, fast vines.
+  element_type: grass
+  mp_cost: 12
+  base_damage: 11
+  damage_variance: 0.20
+  level: 1
+  max_level: 5
+
+- slug: leafCutter
+  name: Leaf Cutter
+  description: Throws sharp-edged leaves to slice the target.
+  element_type: grass
+  mp_cost: 18
+  base_damage: 15
+  damage_variance: 0.15
+  level: 1
+  max_level: 5
+
+- slug: seedBomb
+  name: Seed Bomb
+  description: Hard-shelled seeds explode on impact.
+  element_type: grass
+  mp_cost: 24
+  base_damage: 20
+  damage_variance: 0.12
+  level: 1
+  max_level: 5
+
+- slug: solarBeam
+  name: Solar Beam
+  description: Gathers concentrated light to unleash a devastating blast.
+  element_type: grass
+  mp_cost: 38
+  base_damage: 30
+  damage_variance: 0.08
+  level: 1
+  max_level: 5
+
+- slug: megaDrain
+  name: Mega Drain
+  description: Absorbs nutrients directly from the target to heal.
+  element_type: grass
+  mp_cost: 22
+  base_damage: 14
+  damage_variance: 0.15
+  leech: 40
+  level: 1
+  max_level: 5
+
+- slug: sporesCloud
+  name: Spore Cloud
+  description: Scatters tracking spores that reduce target evasion.
+  element_type: grass
+  mp_cost: 12
+  base_damage: 0
+  damage_variance: 0
+  effect_turns: 3
+  effect_prob: 100
+  effect_boost_percent: -15
+  effect_boost_kind: evasion
+  level: 1
+  max_level: 5
+
+- slug: photosynthesis
+  name: Photosynthesis
+  description: Uses ambient environment light to slowly recover HP over time.
+  element_type: grass
+  mp_cost: 20
+  base_damage: 0
+  damage_variance: 0
+  effect_turns: 3
+  effect_damage: -8
+  effect_prob: 100
+  level: 1
+  max_level: 5
+
+- slug: thornThicket
+  name: Thorn Thicket
+  description: Traps the enemy in sharp briars, dealing damage over turns.
+  element_type: grass
+  mp_cost: 25
+  base_damage: 12
+  damage_variance: 0.18
+  effect_turns: 3
+  effect_damage: 4
+  effect_prob: 70
+  level: 1
+  max_level: 5
+
+# ==========================================
+# ICE ❄️ (8/8)
+# ==========================================
+- slug: iceShard
+  name: Ice Shard
+  description: A razor-sharp shard of ice.
+  element_type: ice
+  mp_cost: 22
+  base_damage: 19
+  damage_variance: 0.12
+  level: 1
+  max_level: 5
+
+- slug: frostBite
+  name: Frost Bite
+  description: Nips at the foe with sub-zero chills.
+  element_type: ice
+  mp_cost: 14
+  base_damage: 12
+  damage_variance: 0.20
+  level: 1
+  max_level: 5
+
+- slug: iceBeam
+  name: Ice Beam
+  description: Expels a freezing beam capable of locking targets down.
+  element_type: ice
+  mp_cost: 28
+  base_damage: 23
+  damage_variance: 0.10
+  level: 1
+  max_level: 5
+
+- slug: blizzard
+  name: Blizzard
+  description: Summons a howling, chaotic storm of ice and wind.
+  element_type: ice
+  mp_cost: 38
+  base_damage: 29
+  damage_variance: 0.15
+  level: 1
+  max_level: 5
+
+- slug: deepFreeze
+  name: Deep Freeze
+  description: Flash freezes the air around the opponent with a solid stun potential.
+  element_type: ice
+  mp_cost: 24
+  base_damage: 10
+  damage_variance: 0.15
+  effect_stun: true
+  effect_turns: 1
+  effect_prob: 25
+  level: 1
+  max_level: 5
+
+- slug: frostArmor
+  name: Frost Armor
+  description: Coats the user in protective layers of hard rime.
+  element_type: ice
+  mp_cost: 16
+  base_damage: 0
+  damage_variance: 0
+  effect_turns: 3
+  effect_prob: 100
+  effect_boost_percent: 12
+  effect_boost_kind: defense
+  level: 1
+  max_level: 5
+
+- slug: chillMists
+  name: Chill Mists
+  description: Lowers surrounding temperature, slightly dropping opponent attack capacity.
+  element_type: ice
+  mp_cost: 15
+  base_damage: 0
+  damage_variance: 0
+  effect_turns: 3
+  effect_prob: 100
+  effect_boost_percent: -8
+  effect_boost_kind: attack_all
+  level: 1
+  max_level: 5
+
+- slug: icicleSpear
+  name: Icicle Spear
+  description: Drops a giant, precise glacier piece directly onto defenses.
+  element_type: ice
+  mp_cost: 32
+  base_damage: 25
+  damage_variance: 0.12
+  level: 1
+  max_level: 5
+
+# ==========================================
+# POISON ☠️ (8/8)
+# ==========================================
+- slug: venomStrike
+  name: Venom Strike
+  description: A swift poisonous lunge.
+  element_type: poison
+  mp_cost: 18
+  base_damage: 11
+  damage_variance: 0.25
+  level: 1
+  max_level: 5
+
+- slug: acidSpit
+  name: Acid Spit
+  description: Launches a glob of corrosive acid.
+  element_type: poison
+  mp_cost: 15
+  base_damage: 13
+  damage_variance: 0.20
+  level: 1
+  max_level: 5
+
+- slug: poisonFang
+  name: Poison Fang
+  description: Sinks venomous fangs into the target.
+  element_type: poison
+  mp_cost: 22
+  base_damage: 17
+  damage_variance: 0.18
+  level: 1
+  max_level: 5
+
+- slug: toxicCloud
+  name: Toxic Cloud
+  description: Engulfs the foe in a noxious mist.
+  element_type: poison
+  mp_cost: 25
+  base_damage: 19
+  damage_variance: 0.15
+  level: 1
+  max_level: 5
+
+- slug: toxicInject
+  name: Toxic Inject
+  description: Injects heavy toxins that deal consistent recurring damage.
+  element_type: poison
+  mp_cost: 20
+  base_damage: 6
+  damage_variance: 0.10
+  effect_turns: 4
+  effect_damage: 7
+  effect_prob: 100
+  level: 1
+  max_level: 5
+
+- slug: miasmaWave
+  name: Miasma Wave
+  description: A wider burst of corrupting gas that hurts and degrades physical output.
+  element_type: poison
+  mp_cost: 30
+  base_damage: 21
+  damage_variance: 0.15
+  effect_turns: 2
+  effect_boost_percent: -10
+  effect_boost_kind: attack_element
+  effect_prob: 50
+  level: 1
+  max_level: 5
+
+- slug: biohazard
+  name: Biohazard
+  description: High-potency nuclear chemical spill that deals extreme sudden damage.
+  element_type: poison
+  mp_cost: 36
+  base_damage: 27
+  damage_variance: 0.12
+  level: 1
+  max_level: 5
+
+- slug: antiToxin
+  name: Anti Toxin
+  description: Purges internal status configurations to recover minor HP.
+  element_type: poison
+  mp_cost: 15
+  base_damage: -10
+  damage_variance: 0.05
+  level: 1
+  max_level: 5
+
+# ==========================================
+# EARTH 🪨 (8/8)
+# ==========================================
 - slug: stoneShield
   name: Stone Shield
   description: Creates a shield of stone.
@@ -283,6 +666,21 @@
   damage_variance: 0.20
   effect_turns: 3
   effect_prob: 100
+  base_defense: 6
+  level: 1
+  max_level: 5
+
+- slug: stoneSkin
+  name: Stone Skin
+  description: Creates a skin of stone.
+  element_type: earth
+  mp_cost: 18
+  base_damage: 0
+  damage_variance: 0.20
+  effect_turns: 5
+  effect_prob: 100
+  effect_boost_percent: 10
+  effect_boost_kind: defense
   level: 1
   max_level: 5
 
@@ -310,32 +708,183 @@
   level: 1
   max_level: 5
 
-- slug: stoneSkin
-  name: Stone Skin
-  description: Creates a skin of stone.
+- slug: earthQuake
+  name: Earthquake
+  description: Shakes the ground with tremendous force.
   element_type: earth
-  mp_cost: 18
-  base_damage: 0
-  damage_variance: 0.20
-  effect_turns: 5
-  effect_prob: 100
-  effect_boost_percent: 10
-  effect_boost_kind: defense
+  mp_cost: 35
+  base_damage: 27
+  damage_variance: 0.10
+  effect_turns: 2
+  effect_prob: 30
   level: 1
   max_level: 5
 
-# Ice
-- slug: iceShard
-  name: Ice Shard
-  description: A razor-sharp shard of ice.
-  element_type: ice
-  mp_cost: 22
-  base_damage: 19
+- slug: pebbleShot
+  name: Pebble Shot
+  description: Rapidly hurls small, solid rocks at low MP cost.
+  element_type: earth
+  mp_cost: 10
+  base_damage: 10
+  damage_variance: 0.22
+  level: 1
+  max_level: 5
+
+- slug: sandTomb
+  name: Sand Tomb
+  description: Traps the enemy inside a harsh, abrasive whirlwind of grit.
+  element_type: earth
+  mp_cost: 24
+  base_damage: 14
+  damage_variance: 0.15
+  effect_turns: 3
+  effect_damage: 4
+  effect_prob: 100
+  level: 1
+  max_level: 5
+
+- slug: seismicFissure
+  name: Seismic Fissure
+  description: Tears the landscape open under the target's feet.
+  element_type: earth
+  mp_cost: 40
+  base_damage: 30
+  damage_variance: 0.05
+  level: 1
+  max_level: 5
+
+# ==========================================
+# DARK 🌑 (8/8)
+# ==========================================
+- slug: ultraInstinct
+  name: Ultra Instinct
+  description: User can evade attacks.
+  element_type: dark
+  mp_cost: 10
+  base_damage: 0
+  damage_variance: 0
+  effect_turns: 3
+  effect_prob: 100
+  effect_boost_percent: 10
+  effect_boost_kind: evasion
+  level: 1
+  max_level: 5
+
+- slug: nightShade
+  name: Night Shade
+  description: Warps reality with deep shadow.
+  element_type: dark
+  mp_cost: 20
+  base_damage: 16
+  damage_variance: 0.20
+  level: 1
+  max_level: 5
+
+- slug: soulDrain
+  name: Soul Drain
+  description: Drains the life force of the foe.
+  element_type: dark
+  mp_cost: 25
+  base_damage: 20
+  damage_variance: 0.10
+  leech: 30
+  level: 1
+  max_level: 5
+
+- slug: shadowClaw
+  name: Shadow Claw
+  description: Slashes with a claw of pure darkness.
+  element_type: dark
+  mp_cost: 28
+  base_damage: 21
+  damage_variance: 0.18
+  level: 1
+  max_level: 5
+
+- slug: voidPulse
+  name: Void Pulse
+  description: Fires a pulse of annihilating energy.
+  element_type: dark
+  mp_cost: 30
+  base_damage: 24
+  damage_variance: 0.15
+  level: 1
+  max_level: 5
+
+- slug: darkSucker
+  name: Dark Sucker
+  description: Quick light-depriving scratch that saps a tiny bit of health.
+  element_type: dark
+  mp_cost: 15
+  base_damage: 11
+  damage_variance: 0.22
+  leech: 20
+  level: 1
+  max_level: 5
+
+- slug: blindSpot
+  name: Blind Spot
+  description: Curtains the enemy's vision, severely dropping their precision accuracy.
+  element_type: dark
+  mp_cost: 18
+  base_damage: 0
+  damage_variance: 0
+  effect_turns: 3
+  effect_prob: 80
+  effect_boost_percent: -20
+  effect_boost_kind: evasion
+  level: 1
+  max_level: 5
+
+- slug: abyssalEclipse
+  name: Abyssal Eclipse
+  description: High-tier ultimate manifestation of darkness.
+  element_type: dark
+  mp_cost: 38
+  base_damage: 29
   damage_variance: 0.12
   level: 1
   max_level: 5
 
-# Psychic
+# ==========================================
+# PSYCHIC 🔮 (8/8)
+# ==========================================
+- slug: insomnia
+  name: Insomnia
+  description: Puts the foe to sleep.
+  element_type: psychic
+  mp_cost: 12
+  base_damage: 0
+  damage_variance: 0
+  effect_turns: 1
+  effect_prob: 20
+  effect_stun: true
+  level: 1
+  max_level: 5
+
+- slug: psychicShield
+  name: Psychic Shield
+  description: Creates a shield of psychic energy.
+  element_type: psychic
+  mp_cost: 18
+  base_damage: 0
+  damage_variance: 0
+  effect_turns: 3
+  effect_prob: 100
+  level: 1
+  max_level: 5
+  base_defense: 5
+
+- slug: psychicBlade
+  name: Psychic Blade
+  description: Slashes with a blade of psychic energy.
+  element_type: psychic
+  mp_cost: 22
+  base_damage: 19
+  damage_variance: 0.18
+  level: 1
+  max_level: 5
+
 - slug: mindBlast
   name: Mind Blast
   description: Unleashes a devastating psychic wave.
@@ -359,42 +908,6 @@
   level: 1
   max_level: 5
 
-- slug: psychicShield
-  name: Psychic Shield
-  description: Creates a shield of psychic energy.
-  element_type: psychic
-  mp_cost: 18
-  base_damage: 0
-  damage_variance: 0.20
-  effect_turns: 3
-  effect_prob: 100
-  level: 1
-  max_level: 5
-  base_defense: 5
-
-- slug: psychicBlade
-  name: Psychic Blade
-  description: Slashes with a blade of psychic energy.
-  element_type: psychic
-  mp_cost: 22
-  base_damage: 19
-  damage_variance: 0.18
-  level: 1
-  max_level: 5
-
-- slug: insomnia
-  name: Insomnia
-  description: Puts the foe to sleep.
-  element_type: psychic
-  mp_cost: 12
-  base_damage: 0
-  damage_variance: 0
-  effect_turns: 1
-  effect_prob: 20
-  effect_stun: true
-  level: 1
-  max_level: 5
-
 - slug: psychicRealms
   name: Psychic Realms
   description: Creates a realm of psychic energy.
@@ -409,37 +922,26 @@
   level: 1
   max_level: 5
 
-# Water
-- slug: waterGun
-  name: Water Gun
-  description: Shoots a stream of water.
-  element_type: water
-  mp_cost: 22
-  base_damage: 19
-  damage_variance: 0.12
-  level: 1
-  max_level: 5
-
-- slug: waterPulse
-  name: Water Pulse
-  description: Creates a pulse of water.
-  element_type: water
-  mp_cost: 28
-  base_damage: 22
-  damage_variance: 0.12
-  level: 1
-  max_level: 5
-
-- slug: fountainOfEnergy
-  name: Fountain of Energy
-  description: Restore MP per turn.
-  element_type: water
-  mp_cost: 28
+- slug: telekinesis
+  name: Telekinesis
+  description: Distracts the targets directly, reducing physical attack values.
+  element_type: psychic
+  mp_cost: 15
   base_damage: 0
   damage_variance: 0
   effect_turns: 3
   effect_prob: 100
-  effect_boost_percent: 10
-  effect_boost_kind: mp
+  effect_boost_percent: -12
+  effect_boost_kind: attack_element
+  level: 1
+  max_level: 5
+
+- slug: cosmicInsight
+  name: Cosmic Insight
+  description: Links with cosmic waves to deal high-tier un-blockable mental damage.
+  element_type: psychic
+  mp_cost: 35
+  base_damage: 26
+  damage_variance: 0.05
   level: 1
   max_level: 5

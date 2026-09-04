@@ -26,7 +26,7 @@ module Api
         end
 
         dest = Rails.root.join("db", "seeds", "conversations", File.basename(filename))
-        File.write(dest, file.read)
+        File.write(dest, file.read.to_s.force_encoding("UTF-8").scrub(""))
 
         render json: { path: dest.to_s }, status: :ok
       end
