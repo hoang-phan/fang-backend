@@ -125,7 +125,8 @@ Matches the frontend `OpponentDef` interface exactly.
   "x":      100,                              // nullable — pixel x offset
   "y":      200,                              // nullable — pixel y offset
   "width":  64,                               // nullable — display width in pixels
-  "height": 64                                // nullable — display height in pixels
+  "height": 64,                               // nullable — display height in pixels
+  "flip":   true                              // optional — only present when true; horizontal mirror
 }
 ```
 
@@ -137,8 +138,8 @@ Sprites are displayed as characters inside a scene (e.g. a character standing in
 {
   "id": 1,
   "chats": [
-    { "role": "hero",     "position": 0, "content": "Thank you for the gift!", "sprites": [] },
-    { "role": "opponent", "position": 1, "content": "It's nothing, really.",   "sprites": [] }
+    { "speaker": "Mitsu",      "position": 0, "content": "Thank you for the gift!", "sprites": [] },
+    { "speaker": "Illyasviel", "position": 1, "content": "It's nothing, really.",   "sprites": [] }
   ],
   // optional — only present when set:
   "backgroundUrl": "/illyasviel/cinematic1.webp", // background image for the scene
@@ -151,7 +152,7 @@ Sprites are displayed as characters inside a scene (e.g. a character standing in
 
 ```jsonc
 {
-  "role":    "hero",                    // "hero" | "opponent" | "other"
+  "speaker":  "Mitsu",                  // display name — "Mitsu" (hero), commander name (opponent), or "" (narrative)
   "position": 0,                        // ordering index within the conversation
   "content":  "Thank you for the gift!", // dialogue text
   "sprites":  [ /* Sprite[] */ ]        // characters displayed in the scene for this line
@@ -522,10 +523,76 @@ Place files under `public/images/opponents/<slug>/`. Accepted formats: `.webp`, 
 
 ---
 
-## Opponent Options
+## Conversation editor
+
+Shared with empire-backend via the local `conversation_editor` gem (`../conversation-editor`). Prefer these routes from fang-conversation-editor:
+
+### GET /api/v1/editor/meta
+
+**Response** `200`
+```jsonc
+{
+  "id": "fang",
+  "characterLabel": "Opponent",
+  "slotKinds": ["chat", "gift", "cinematic"]
+}
+```
+
+### GET /api/v1/editor/characters
+
+**Response** `200`
+```jsonc
+[
+  {
+    "id": "illyasviel",
+    "name": "Illyasviel",
+    "slots": [
+      { "kind": "chat", "key": "chat", "label": "Chat", "filename": "illyasviel-conversations.yml" },
+      { "kind": "gift", "key": "chocolate-box", "label": "Chocolate Box", "filename": "illyasviel-gift-chocolate-box.yml" },
+      { "kind": "cinematic", "key": "1", "label": "Cinematic 1", "filename": "illyasviel-cinematic-1.yml" }
+    ]
+  }
+]
+```
+
+### GET /api/v1/editor/assets
+### GET /api/v1/editor/conversations
+### GET /api/v1/editor/conversations/:filename
+### POST /api/v1/editor/assets/upload_conversation_yml
+### POST /api/v1/editor/scripts/convert
+
+Same behaviour as the legacy endpoints below (assets list/upload + script→YAML). `GET /conversations` lists `.yml`/`.yaml` basenames in `db/seeds/conversations/`; `GET /conversations/:filename` returns that file as `text/yaml` (basename only; `404` if missing).
+
+---
+
+## Image downloader
+
+Shared with empire-backend via the local `image_downloader` gem (`../image-downloader`). Used by fang-image-downloader — set extension `backendBaseUrl` to this server (`http://localhost:3000`). Requires ImageMagick (`convert`) on the host.
+
+### POST /api/v1/downloads
+
+Fetch an image URL, resize with ImageMagick, write into the given folder.
+
+**Request**
+```jsonc
+{
+  "url": "https://example.com/sprites/hero.png",
+  "path": "/home/user/fang/sprites",
+  "dimension": { "width": 256, "height": 256 }
+}
+```
+
+**Response** `200` `{ "ok": true, "savedPath": "/home/user/fang/sprites/hero.png" }`  
+**Response** `422` `{ "error": "..." }`
+
+---
+
+## Opponent Options (legacy alias)
 
 ### GET /api/v1/opponent_options
-Lightweight endpoint for the conversation editor. Returns each opponent's id, name, and gift names in parameterized form — suitable for constructing seed filenames like `{id}-gift-{giftName}.yml`.
+Legacy shape for older editor builds. Prefer `GET /api/v1/editor/characters`.
+
+Returns each opponent's id, name, and gift names in parameterized form — suitable for constructing seed filenames like `{id}-gift-{giftName}.yml`.
 
 **Response** `200`
 ```jsonc
@@ -542,11 +609,11 @@ Lightweight endpoint for the conversation editor. Returns each opponent's id, na
 
 ---
 
-## Assets
+## Assets (legacy aliases)
 
 ### GET /api/v1/assets
 Returns all image and video file paths available in the `public/` folder (recursive).  
-Useful for populating pickers in the conversation editor.
+Useful for populating pickers in the conversation editor. Prefer `GET /api/v1/editor/assets`.
 
 Included extensions: `.webp`, `.gif`, `.png`, `.jpg`, `.jpeg`, `.mp4`
 
@@ -567,7 +634,7 @@ const fullUrl = `http://localhost:3000${path}`
 ---
 
 ### POST /api/v1/assets/upload_conversation_yml
-Writes a YAML file into `db/seeds/conversations/` on the server. Intended for the conversation editor to persist its output when the browser cannot write to the filesystem directly.
+Writes a YAML file into `db/seeds/conversations/` on the server. Intended for the conversation editor to persist its output when the browser cannot write to the filesystem directly. Prefer `POST /api/v1/editor/assets/upload_conversation_yml`.
 
 Accepts `multipart/form-data`.
 
@@ -593,29 +660,27 @@ curl -X POST http://localhost:3000/api/v1/assets/upload_conversation_yml \
 
 ---
 
-## Scripts
+## Scripts (legacy alias)
 
 ### POST /api/v1/scripts/convert
-Converts a plain-text narrative script into a YAML conversation block. Dialogue in double quotes becomes `role: hero`; surrounding narrative becomes `role: other` (wrapped in parentheses).
+Converts a plain-text named-speaker script into YAML conversations. `Name: dialogue` lines become spoken chats with that `speaker`; bare paragraphs become narrative with blank `speaker` (wrapped in parentheses). Prefer `POST /api/v1/editor/scripts/convert`.
 
 **Request body** (JSON)
 ```jsonc
 {
-  "text": "She smiled. \"Hello there,\" she said. He nodded in silence."
+  "text": "She smiled.\n\nMitsu: Hello there.\n\nYasuda Kunitsugu: Face me!"
 }
 ```
 
 **Response** `200` — YAML string (`text/yaml`)
 ```yaml
 - chats:
-  - role: other
+  - speaker: ""
     content: (She smiled.)
-  - role: hero
-    content: Hello there,
-  - role: other
-    content: (she said.)
-  - role: other
-    content: (He nodded in silence.)
+  - speaker: Mitsu
+    content: Hello there.
+  - speaker: Yasuda Kunitsugu
+    content: Face me!
 ```
 
 **Response** `422` — validation errors
@@ -624,7 +689,7 @@ Converts a plain-text narrative script into a YAML conversation block. Dialogue 
 ```bash
 curl -X POST http://localhost:3000/api/v1/scripts/convert \
   -H "Content-Type: application/json" \
-  -d '{"text": "She smiled. \"Hello,\" she said."}'
+  -d '{"text": "She smiled.\n\nMitsu: Hello."}'
 ```
 
 ---

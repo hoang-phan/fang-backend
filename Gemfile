@@ -35,6 +35,12 @@ gem "image_processing", "~> 1.2"
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin Ajax possible
 gem "rack-cors"
 
+# Shared conversation-editor API (fang-conversation-editor)
+gem "conversation_editor", path: "../conversation-editor"
+
+# Shared image download+resize API (fang-image-downloader)
+gem "image_downloader", path: "../image-downloader"
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"

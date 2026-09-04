@@ -60,7 +60,7 @@ module OpponentSerialization
 
   def serialize_chat(chat)
     {
-      role:     chat.role,
+      speaker:  chat.speaker,
       position: chat.position,
       content:  chat.content,
       sprites:  chat.sprites.map { |s| serialize_sprite(s) }
@@ -73,6 +73,7 @@ module OpponentSerialization
     h[:y]      = sprite.y      unless sprite.y.nil?
     h[:width]  = sprite.width  unless sprite.width.nil?
     h[:height] = sprite.height unless sprite.height.nil?
+    h[:flip]   = true if sprite.flip
     h
   end
 

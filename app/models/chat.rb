@@ -5,10 +5,4 @@ class Chat < ApplicationRecord
   validates :position, numericality: { greater_than_or_equal_to: 0 }
 
   has_many :sprites, as: :spriteable, dependent: :destroy
-
-  enum :role, {
-    hero: 0,
-    opponent: 1,
-    other: 2
-  }
 end

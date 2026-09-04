@@ -1,23 +1,22 @@
+# frozen_string_literal: true
+
 module Api
   module V1
+    # Legacy alias for GET /api/v1/editor/characters (giftNames shape for old editors).
     class OpponentOptionsController < ApplicationController
       def index
-        opponents = Opponent.includes(:gifts).all.order(:name)
-        render json: opponents.map { |o| serialize_opponent_option(o) }
-      end
+        provider = ConversationEditor.configuration.character_provider
+        characters = provider ? provider.characters : []
 
-      private
-
-      def serialize_opponent_option(opponent)
-        {
-          id:         opponent.slug,
-          name:       opponent.name,
-          giftNames:  opponent.gifts.sort_by(&:name).map { |g| parameterize(g.name) }
+        render json: characters.map { |c|
+          {
+            id: c[:id] || c["id"],
+            name: c[:name] || c["name"],
+            giftNames: (c[:slots] || c["slots"] || [])
+              .select { |s| (s[:kind] || s["kind"]) == "gift" }
+              .map { |s| s[:key] || s["key"] }
+          }
         }
-      end
-
-      def parameterize(str)
-        str.downcase.gsub(/[^a-z0-9]+/, '-').gsub(/^-|-$/, '')
       end
     end
   end

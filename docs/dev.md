@@ -30,7 +30,9 @@ app/
     api/v1/
       moves_controller.rb           # CRUD for Move
       opponents_controller.rb       # CRUD for Opponent + file uploads; index is gacha-key-gated (not a full list)
-      opponent_options_controller.rb # Lightweight read — id/name/giftNames for conversation editor
+      opponent_options_controller.rb # Legacy alias — prefer /api/v1/editor/characters
+      assets_controller.rb           # Legacy alias — prefer /api/v1/editor/assets*
+      scripts_controller.rb          # Legacy alias — prefer /api/v1/editor/scripts/convert
       gacha_controller.rb           # POST /gacha — random opponent pull
     concerns/
       opponent_serialization.rb     # shared serialize_opponent/_move/_gift/... used by opponents + gacha controllers
@@ -176,11 +178,11 @@ Belongs to Conversation. Ordered by `position`. Has many Sprites (polymorphic).
 |-----------------|---------|--------------------------------------------------------|
 | id              | integer | auto PK                                                |
 | conversation_id | integer | FK → conversations.id                                  |
-| role            | integer | enum — `hero: 0`, `opponent: 1`, `other: 2`            |
+| speaker         | string  | display name — `"Mitsu"`, commander name, or `""` (narrative) |
 | position        | integer | ordering index within the conversation                 |
 | content         | text    | dialogue text                                          |
 
-`avatar` column has been removed — use `role` instead.
+`role` enum (`hero` / `opponent` / `other`) has been removed — use `speaker` instead. Seed YAML chats use the same field.
 
 ### Sprite
 Polymorphic — currently belongs to Chat (`spriteable_type: "Chat"`). Represents a character displayed inside a scene (e.g. a hero standing in a room). There is no avatar rendered for a chat line; sprites replace that concept.
@@ -195,6 +197,7 @@ Polymorphic — currently belongs to Chat (`spriteable_type: "Chat"`). Represent
 | y                | integer | nullable — pixel y offset in the scene        |
 | width            | integer | nullable — display width in pixels            |
 | height           | integer | nullable — display height in pixels           |
+| flip             | boolean | default false — horizontal mirror when true   |
 
 ### OpponentMove (join table)
 Links an opponent to its moves with an explicit position (0–3).
@@ -244,10 +247,10 @@ Controllers serialise to camelCase to match the frontend interfaces. The mapping
 | `conversation.id`          | `id`              | conversations resource                         |
 | `conversation.background_url` | `backgroundUrl` | omitted when null                             |
 | `conversation.position`    | `position`        | omitted when null; ordering for cinematic/gift |
-| `chat.role`                | `role`            | string: `"hero"`, `"opponent"`, or `"other"`   |
+| `chat.speaker`             | `speaker`         | string: `"Mitsu"`, commander name, or `""` (narrative) |
 | `chat.position`            | `position`        |                                                |
 | `chat.content`             | `content`         |                                                |
-| `chat.sprites`             | `sprites`         | array of Sprite objects (url, x, y, width, height) |
+| `chat.sprites`             | `sprites`         | array of Sprite objects (url, x, y, width, height, flip) |
 
 `move.icon` is **not** serialised — the frontend uses the `type` field to derive the icon.
 

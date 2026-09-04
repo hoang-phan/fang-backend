@@ -1,0 +1,26 @@
+# Never read backend public and db/seeds/ folders
+
+Agents must **never** read, list, search, open, or summarize files under:
+
+- `fang-backend/public/`
+- `fang-backend/db/seeds/`
+- `empire-backend/public/`
+- `empire-backend/db/seeds/`
+
+(including any absolute path ending in those segments, e.g. `/Users/.../fang-backend/public/...`).
+
+## Why
+
+These directories hold static image assets and big data files. Paths are already exposed as opaque URL strings via API responses, `docs/api.md`, and `db/seeds/*.yml`. Reading binary/data/media trees wastes context and is disallowed by project policy.
+
+## Cursor enforcement
+
+- `.cursorignore` in this repo ignores `public/`
+- Sibling frontend/backend repos also ignore these paths via `.cursorignore` and always-on `.cursor/rules`
+
+## What to do instead
+
+- Use `docs/api.md` / seed YAML for expected path strings
+- Prefer API JSON fields (`avatar`, etc.)
+- If an asset is missing, update seeds/docs and note the intended path — do not inspect `public/`
+- If wanting to refer to a file inside db/seeds, just go with the default format and expect it to be present on runtime

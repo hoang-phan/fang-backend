@@ -121,13 +121,15 @@ end
 
 sentences = split_into_sentences(text)
 
+# Legacy quote-based parser. Prefer ConversationEditor::ScriptToConversationService
+# (named-speaker scripts). Mapping: dialogue → "Mitsu", narrative → blank speaker.
 blocks = []
 sentences.each do |sentence|
   parse_segments(sentence).each do |seg|
     if seg[:type] == :dialogue
-      blocks << { role: "hero", content: seg[:content] }
+      blocks << { speaker: "Mitsu", content: seg[:content] }
     else
-      blocks << { role: "other", content: "(#{seg[:content]})" }
+      blocks << { speaker: "", content: "(#{seg[:content]})" }
     end
   end
 end
@@ -136,7 +138,8 @@ end
 def format_chat_lines(blocks, indent: "            ")
   lines = []
   blocks.each do |block|
-    lines << "#{indent}- role: #{block[:role]}"
+    speaker = block[:speaker].to_s
+    lines << (speaker.empty? ? "#{indent}- speaker: \"\"" : "#{indent}- speaker: #{speaker}")
     lines << "#{indent}  content: #{block[:content]}"
   end
   lines
@@ -169,8 +172,7 @@ is_new_file = !File.exist?(conv_path)
 # Load existing conversations or start fresh
 existing = is_new_file ? [] : (YAML.load_file(conv_path) || [])
 
-new_conversation = { "chats" => blocks.map { |b| { "role" => b[:role], "content" => b[:content] } } }
-
+new_conversation = { "chats" => blocks.map { |b| { "speaker" => b[:speaker], "content" => b[:content] } } }
 # Cinematics get a background_url placeholder if file is brand new
 if options[:level] && is_new_file
   new_conversation = { "background_url" => "/#{opponent_id}/cinematic#{options[:level]}.webp" }.merge(new_conversation)

@@ -45,7 +45,7 @@ Only after Steps 1–3, write or change code:
 - New endpoint: route → controller action → `serialize_*` method
 - New model: migration (`id: false` + string PK if it has a slug) → model validations → seed entry
 - New image slot: `has_one_attached :name` in model → `attach_images` in controller → `serialize_opponent` URL array
-- Chat `role` field: enum (`hero`, `opponent`, `other`) — replaces the old `avatar` string. Serialise as a string (`.to_s`) in `serialize_chat`.
+- Chat `speaker` field: string display name — `"Mitsu"` (hero), the commander/opponent name, or `""` (narrative / stage direction). Replaces the old `role` enum (`hero` / `opponent` / `other`). Serialise as-is in `serialize_chat`. Seed YAML chats use `speaker` the same way (see conversation-editor gem contract).
 - Sprites: polymorphic `has_many :sprites, as: :spriteable` on Chat. Serialise as `{ url, x, y, width, height }` array — omit nil position/size fields or include them as null depending on frontend contract. Sprites represent characters displayed inside a scene, not avatar icons.
 - Schema change: generate a new migration, never edit existing ones
 

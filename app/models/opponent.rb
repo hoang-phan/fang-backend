@@ -46,11 +46,12 @@ class Opponent < ApplicationRecord
     # opponent), then a random opponent within that rarity. Returns nil only
     # if there are no opponents at all.
     def gacha_pull
-      counts = group(:rarity).count
-      weights = RARITY_WEIGHTS.slice(*counts.select { |_, c| c.positive? }.keys)
-      return nil if weights.empty?
+      # counts = group(:rarity).count
+      # weights = RARITY_WEIGHTS.slice(*counts.select { |_, c| c.positive? }.keys)
+      # return nil if weights.empty?
 
-      where(rarity: pick_weighted_rarity(weights)).order(Arel.sql("RANDOM()")).first
+      # where(rarity: pick_weighted_rarity(weights)).order(Arel.sql("RANDOM()")).first
+      where(slug: 'reika_kirishima').first
     end
 
     private

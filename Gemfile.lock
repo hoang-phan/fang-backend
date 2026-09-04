@@ -1,3 +1,15 @@
+PATH
+  remote: ../conversation-editor
+  specs:
+    conversation_editor (0.1.0)
+      rails (>= 8.0, < 9)
+
+PATH
+  remote: ../image-downloader
+  specs:
+    image_downloader (0.1.0)
+      rails (>= 8.0, < 9)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -352,8 +364,10 @@ DEPENDENCIES
   bootsnap
   brakeman
   bundler-audit
+  conversation_editor!
   debug
   foreman
+  image_downloader!
   image_processing (~> 1.2)
   kamal
   puma (>= 5.0)

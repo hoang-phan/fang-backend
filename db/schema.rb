@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_10_145841) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_04_080000) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -44,11 +44,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_10_145841) do
     t.integer "conversation_id", null: false
     t.datetime "created_at", null: false
     t.integer "position", default: 0, null: false
-    t.integer "role"
+    t.string "speaker", default: "", null: false
     t.datetime "updated_at", null: false
     t.index ["conversation_id", "position"], name: "index_chats_on_conversation_id_and_position"
     t.index ["conversation_id"], name: "index_chats_on_conversation_id"
-    t.index ["role"], name: "index_chats_on_role"
   end
 
   create_table "cinematics", force: :cascade do |t|
@@ -146,6 +145,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_10_145841) do
 
   create_table "sprites", force: :cascade do |t|
     t.datetime "created_at", null: false
+    t.boolean "flip", default: false, null: false
     t.integer "height"
     t.integer "spriteable_id"
     t.string "spriteable_type"
